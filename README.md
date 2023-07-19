@@ -1,4 +1,4 @@
-# scRANK
+# scRANK - Single Cell Ranking Analysis Toolkit
 ## Update
 Jun 27, 2023 (Version 1.0.0)
 
