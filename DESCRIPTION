@@ -1,6 +1,6 @@
 Package: scRANK
 Type: Package
-Title: Ranking scRNA-Seq Cells
+Title: Single Cell Ranking Analysis Toolkit
 Version: 0.1.0
 Author: Anastasis Oulas
 Imports: BiocNeighbors,CellChat,KEGGREST,GO.db,rWikiPathways,ReactomeContentService4R,msigdb,multtest,SeuratDisk,Seurat,patchwork,ggplot2,cowplot,enrichR,gridExtra,ggpubr,RColorBrewer,crank,riverplot,dplyr,rvest,stringr,tidyr
