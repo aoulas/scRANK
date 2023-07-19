@@ -1,4 +1,4 @@
-Package: CellRank
+Package: scRANK
 Type: Package
 Title: Ranking scRNA-Seq Cells
 Version: 0.1.0
