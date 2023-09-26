@@ -216,7 +216,8 @@ extractMalacards<-function (disease,files,path){
     if(nupub !=0){
       drugscores[i]<-drugscores[i]/nupub
       latestpub<-pubs[1]
-      drugscores[i]<-drugscores[i]/latestpub
+      print(as.numeric(latestpub))
+      drugscores[i]<-drugscores[i]/as.numeric(latestpub)
     }
 
   }
