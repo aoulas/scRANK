@@ -1,4 +1,7 @@
 # scRANK - Single Cell Ranking Analysis Toolkit
+
+![Alt text](https://github.com/aoulas/scRANK/blob/main/scRANKLogo4.png "scRANK")
+
 ## Update
 Jun 27, 2023 (Version 1.0.0)
 
