@@ -292,7 +292,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
           if(!endsWith(path,"/")){
             path<-paste(path,"/",sep="")
           }
-          drugInfo<-read.delim(paste(path,"drug_repurposing_hub.txt",sep=""))
+          
           AlldrugsCellIDs<-c()
           if(length(drugsUp) > 50){
             AlldrugsCellIDs<-c(AlldrugsCellIDs,drugsUp[1:50])
@@ -315,40 +315,43 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
               AlldrugsCellIDs<-c(AlldrugsCellIDs,drugsUp[51:(51+extradrugs)])
             }
           }
-          foundds<-0
-          MOA<-c()
-          if(length(AlldrugsCellIDs) > 100){
-            AlldrugsCellIDs<-AlldrugsCellIDs[1:100]
-          }
-          for(d in 1:length(AlldrugsCellIDs)){
-            indexfoundd<-grep(AlldrugsCellIDs[d],drugInfo$pert_iname)
-            if(!length(indexfoundd)==0){
-              foundds<-foundds+1
-              MOA<-rbind(MOA,cbind(drugInfo$pert_iname[indexfoundd],drugInfo$moa[indexfoundd],drugInfo$disease_area[indexfoundd]))
+          
+          if(checkdrug==FALSE){
+            drugInfo<-read.delim(paste(path,"drug_repurposing_hub.txt",sep=""))
+            foundds<-0
+            MOA<-c()
+            if(length(AlldrugsCellIDs) > 100){
+              AlldrugsCellIDs<-AlldrugsCellIDs[1:100]
+            }
+            for(d in 1:length(AlldrugsCellIDs)){
+              indexfoundd<-grep(AlldrugsCellIDs[d],drugInfo$pert_iname)
+              if(!length(indexfoundd)==0){
+                foundds<-foundds+1
+                MOA<-rbind(MOA,cbind(drugInfo$pert_iname[indexfoundd],drugInfo$moa[indexfoundd],drugInfo$disease_area[indexfoundd]))
+              }
+            }
+            indexesnull1<-which(MOA[,2] == "")
+            if(!length(indexesnull1)==0){
+              MOA<-MOA[-indexesnull1,]
+            }
+            indexesnull2<-which(MOA[,3] == "")
+            if(!length(indexesnull2)==0){
+              MOA<-MOA[-indexesnull2,]
+            }
+            
+            # sort by Freq
+            tableMOAs<-as.data.frame(table(MOA[,2]))
+            
+            #tableMOAs[,1][grep("sera",tableMOAs[,1])]
+            matchMOA<-unique(grep(paste(priorknowledgeMOA,collapse="|"),
+                                  as.character(tableMOAs$Var1), value=TRUE,ignore.case = T))
+            tableMOAs <- tableMOAs[order(tableMOAs$Freq,decreasing = T),]
+            if(scan=="Cell"){
+              tableMOAsAll<-rbind(tableMOAsAll,cellID,tableMOAs)
+            }else{
+              tableMOAsAll<-rbind(tableMOAsAll,"Bulk_RNA",tableMOAs)
             }
           }
-          indexesnull1<-which(MOA[,2] == "")
-          if(!length(indexesnull1)==0){
-            MOA<-MOA[-indexesnull1,]
-          }
-          indexesnull2<-which(MOA[,3] == "")
-          if(!length(indexesnull2)==0){
-            MOA<-MOA[-indexesnull2,]
-          }
-
-          # sort by Freq
-          tableMOAs<-as.data.frame(table(MOA[,2]))
-
-          #tableMOAs[,1][grep("sera",tableMOAs[,1])]
-          matchMOA<-unique(grep(paste(priorknowledgeMOA,collapse="|"),
-                                as.character(tableMOAs$Var1), value=TRUE,ignore.case = T))
-          tableMOAs <- tableMOAs[order(tableMOAs$Freq,decreasing = T),]
-          if(scan=="Cell"){
-            tableMOAsAll<-rbind(tableMOAsAll,cellID,tableMOAs)
-          }else{
-            tableMOAsAll<-rbind(tableMOAsAll,"Bulk_RNA",tableMOAs)
-          }
-
           if(checkdrug==FALSE){
             #Checks MOAs directly
             matchMOAIndexesOrdered<-match(tolower(priorknowledgeMOA),tolower(iconv(as.character(tableMOAs$Var1),"ISO-8859-1")))
@@ -357,17 +360,20 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             matchMOAIndexesOrdered<-match(tolower(priorknowledgeMOA),tolower(iconv(as.character(AlldrugsCellIDs),"ISO-8859-1")))
           }
           AlldrugsCellIDs[matchMOAIndexesOrdered[!isNA(matchMOAIndexesOrdered)]]
-
-          sumoffreq<-sum(tableMOAs$Freq[matchMOAIndexesOrdered][!is.na(tableMOAs$Freq[matchMOAIndexesOrdered])])
+          sumoffreq<-0
+          if(checkdrug==FALSE){
+            sumoffreq<-sum(tableMOAs$Freq[matchMOAIndexesOrdered][!is.na(tableMOAs$Freq[matchMOAIndexesOrdered])])
+          }
           if(length(unique(matchMOAIndexesOrdered)) == 1 && is.na(unique(matchMOAIndexesOrdered))){
             matchMOAIndexesOrdered<-tidyr::replace_na(matchMOAIndexesOrdered,1000)
           }else{
             matchMOAIndexesOrdered<-tidyr::replace_na(matchMOAIndexesOrdered,(length(AlldrugsCellIDs)+1))
           }
-
-          matchMOAIndexes<-unique(grep(paste(priorknowledgeMOA,collapse="|"),
+          
+          if(checkdrug==FALSE){
+            matchMOAIndexes<-unique(grep(paste(priorknowledgeMOA,collapse="|"),
                                        as.character(tableMOAs$Var1), ignore.case = T))
-
+          }
 
           if(!is.na(sumoffreq) && sumoffreq !=0 && checkdrug==FALSE){
             celleuc<-euclidean(c(1:length(priorknowledgeMOA)),matchMOAIndexesOrdered)
