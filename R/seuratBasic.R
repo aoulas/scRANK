@@ -348,11 +348,15 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
     loaded.dataSO.combined$celltype <- Idents(loaded.dataSO.combined)
 
     plot(DimPlot(loaded.dataSO.combined, reduction = "umap", split.by = "label",label = TRUE))
-
+    
+    n <- length(unique(loaded.dataSO.combined$label))
+    qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
+    col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+    cols_to_use<-sample(col_vector, n)
     markers.to.plot <- unique(loaded.dataSO.combined.markerstop2$gene)
-    plot(DotPlot(loaded.dataSO.combined, features = markers.to.plot, cols = c("blue", "red"), dot.scale = 8, split.by = "label")) +
+    plot(DotPlot(loaded.dataSO.combined, features = markers.to.plot, cols = cols_to_use, dot.scale = 8, split.by = "label")) +
       RotatedAxis()
-    plot(DotPlot(loaded.dataSO.combined, features = c(loaded.dataSO.combined.markerstop1$gene[1]), cols = c("blue", "red"), dot.scale = 8, split.by = "label") )+
+    plot(DotPlot(loaded.dataSO.combined, features = c(loaded.dataSO.combined.markerstop1$gene[1]), cols = cols_to_use, dot.scale = 8, split.by = "label") )+
       RotatedAxis()
     plot(VlnPlot(loaded.dataSO.combined, features = c(loaded.dataSO.combined.markerstop1$gene[1]),split.by = "label",split.plot = TRUE))
 
@@ -486,12 +490,14 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
   termsMSIG<-unique(termsMSIG)
 
   termsReact<-c()
-  for(KI in 1:length(keywordsReact)){
-    bdd.search <- searchQuery(query = keywordsReact[KI], species = "human",types = "Pathway")
-    bdd.search$results$entries[[1]]$name[1]
-    id<-query(id = paste("R-HSA-",bdd.search$results$entries[[1]]$dbId[1],sep=""))
-    print(id$displayName)
-    termsReact<-c(termsReact,id$displayName)
+  if(keywordsReact[1]!=""){
+    for(KI in 1:length(keywordsReact)){
+      bdd.search <- searchQuery(query = keywordsReact[KI], species = "human",types = "Pathway")
+      bdd.search$results$entries[[1]]$name[1]
+      id<-query(id = paste("R-HSA-",bdd.search$results$entries[[1]]$dbId[1],sep=""))
+      print(id$displayName)
+      termsReact<-c(termsReact,id$displayName)
+    }
   }
 
   if(checkdrug==TRUE){
