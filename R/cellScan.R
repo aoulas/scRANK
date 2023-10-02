@@ -90,9 +90,15 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             enrichedPaths <- enrichr(c(Up,Down), dbstousePaths)#
           }
           if(scan=="Cell"){
+            jpeg(file=paste(subDir,"/PATHWAYS_",cellID,"_",disease,".jpg",sep=""),
+                 width=1200, height=800)
             if (websiteLive) plot(plotEnrich(enrichedPaths[["KEGG_2021_Human"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("KEGG",cellID,sep=" "))+plotEnrich(enrichedPaths[["GO_Biological_Process_2021"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("GO_Bio_Pro",cellID))+plotEnrich(enrichedPaths[["MSigDB_Hallmark_2020"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("MSigDB",cellID))+plotEnrich(enrichedPaths[["WikiPathway_2021_Human"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("WIKI",cellID))+plotEnrich(enrichedPaths[["Reactome_2022"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("Reactome",cellID)))
+            dev.off()
           }else{
+            jpeg(file=paste(subDir,"/PATHWAYS_BULK_",disease,".jpg",sep=""),
+                 width=1200, height=800)
             if (websiteLive) plot(plotEnrich(enrichedPaths[["KEGG_2021_Human"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("KEGG","Bulk",sep=" "))+plotEnrich(enrichedPaths[["GO_Biological_Process_2021"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("GO_Bio_Pro","Bulk"))+plotEnrich(enrichedPaths[["MSigDB_Hallmark_2020"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("MSigDB","Bulk")))
+            dev.off()
           }
 
           paths<-enrichedPaths[["KEGG_2021_Human"]]
@@ -280,14 +286,26 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
 
           if(scan=="Cell"){
             if(nrow(enrichedUp[["Old_CMAP_down"]]) != 0 && nrow(enrichedDown[["Old_CMAP_up"]]) != 0){
+              jpeg(file=paste(subDir,"/DRUGS_",cellID,"_",disease,".jpg",sep=""),
+                   width=1200, height=800)
               if (websiteLive) plot(plotEnrich(enrichedUp[["Old_CMAP_down"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "UP",sep=" "))+plotEnrich(enrichedDown[["Old_CMAP_up"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "Down",sep=" ")))
+              dev.off()
             }else if(nrow(enrichedUp[["Old_CMAP_down"]]) != 0 && nrow(enrichedDown[["Old_CMAP_up"]]) == 0){
+              jpeg(file=paste(subDir,"/DRUGS_",cellID,"_",disease,".jpg",sep=""),
+                   width=1200, height=800)
               if (websiteLive) plot(plotEnrich(enrichedUp[["Old_CMAP_down"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "UP",sep=" ")))
+              dev.off()
             }else if(nrow(enrichedUp[["Old_CMAP_down"]]) == 0 && nrow(enrichedDown[["Old_CMAP_up"]]) != 0){
+              jpeg(file=paste(subDir,"/DRUGS_",cellID,"_",disease,".jpg",sep=""),
+                   width=1200, height=800)
               if (websiteLive) plotEnrich(enrichedDown[["Old_CMAP_up"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "Down",sep=" "))
+              dev.off()
             }
           }else{
+            jpeg(file=paste(subDir,"/DRUGS_BULK_",disease,".jpg",sep=""),
+                 width=1200, height=800)
             if (websiteLive) plot(plotEnrich(enrichedUp[["Old_CMAP_down"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", "Bulk", "UP",sep=" "))+plotEnrich(enrichedDown[["Old_CMAP_up"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", "Bulk", "Down",sep=" ")))
+            dev.off()
           }
           if(!endsWith(path,"/")){
             path<-paste(path,"/",sep="")
