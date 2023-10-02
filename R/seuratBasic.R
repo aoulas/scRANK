@@ -2,6 +2,10 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
   library(enrichR)
   library(ReactomeContentService4R)
   library(GO.db)
+  subDir <- "Figures"
+  if (!file.exists(subDir)){
+    dir.create(file.path(path, subDir))
+  }
   if (missing(disease)) cat("Argument disease is missing") else cat(paste("Argument disease =", disease));
   cat ("\n");
   if (missing(path)) cat("Argument path is missing") else cat(paste("Argument path =", path));
@@ -245,9 +249,16 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
   options(future.globals.maxSize = 8000 * 1024^2)
   if(index==2){
     loaded.dataSO.combined <-loaded.dataSO
+    jpeg(file=paste(subDir,"/FEATURE_PLOT_",disease,".jpg",sep=""),
+        width=1000, height=800,res=100)
     plot(plot2)
+    dev.off()
   }else{
+    loaded.dataSO.combined <-loaded.dataSO
+    jpeg(file=paste(subDir,"/FEATURE_PLOT_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     do.call("grid.arrange", c(plot.list))#, ncol = (index-1))
+    dev.off()
     features <- SelectIntegrationFeatures(object.list = loaded.dataSO.list)
     loaded.dataSO.anchors <- FindIntegrationAnchors(object.list = loaded.dataSO.list, dims = 1:20)#,reference = 1,k.filter = NA,anchor.features = features,verbose = TRUE
     loaded.dataSO.combined <- IntegrateData(anchorset = loaded.dataSO.anchors, dims = 1:20)
@@ -272,13 +283,22 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
   }
   p2combined <- DimPlot(loaded.dataSO.combined, reduction = "umap", label = TRUE)
   if(annotate==FALSE){
+    jpeg(file=paste(subDir,"/UMAP_ANNOT_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(p1combined+p2combined)
+    dev.off()
   }else{
+    jpeg(file=paste(subDir,"/UMAP_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(p2combined)
+    dev.off()
   }
 
   if(annotate==FALSE){
+    jpeg(file=paste(subDir,"/UMAP_ANNOT2_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(DimPlot(loaded.dataSO.combined, reduction = "umap", split.by = userlabel,group.by = usercelltype,raster=FALSE))
+    dev.off()
   }
 
   if(annotate==TRUE){
@@ -311,19 +331,26 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
 
     genesAll<-as.data.frame(loaded.dataSO.combined.markerstop6$gene)
     unique(loaded.dataSO.combined$seurat_clusters)
-
+    
     #Visualize top 4 markers
+    jpeg(file=paste(subDir,"/TOP4-MARKERS_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(FeaturePlot(loaded.dataSO.combined, features = loaded.dataSO.combined.markerstop1$gene[c(1,2,3,4)]))
-
+    dev.off()
+    
     #Visualize volcano plot top 1 markers
+    jpeg(file=paste(subDir,"/TOP1-MARKERS_VOL_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(VlnPlot(loaded.dataSO.combined, features = loaded.dataSO.combined.markerstop1$gene[1]))
-
+    dev.off()
     #FeaturePlot(loaded.dataSO.combined, features = loaded.dataSO.combined.markerstop1$gene[1],label = T)& theme(legend.position = c(0.1,0.2))
 
     loaded.dataSO.combined <- ScaleData(loaded.dataSO.combined, verbose = FALSE)
-
+    
+    jpeg(file=paste(subDir,"/TOP2-MARKERS_HEAT_",disease,".jpg",sep=""),
+        width=1000, height=800,res=100)
     plot(DoHeatmap(loaded.dataSO.combined, features = loaded.dataSO.combined.markerstop2$gene) + NoLegend())
-
+    dev.off()
     #Run Enrich R on top 100 Markers
     listEnrichrSites()
     setEnrichrSite("Enrichr") # Human genes
@@ -344,35 +371,51 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
       annotatedclusters<-c(annotatedclusters,toString(celltype[3]))#changed to Tabula Sapiens changed to Panglao for MM
       names(enriched)<-paste(names(enriched),m,sep = "_")
       listofresults<-c(listofresults,enriched)
-
+      
+      jpeg(file=paste(subDir,"/CELL_TYPES_CLUSTER_",m,"_",disease,".jpg",sep=""),
+           width=1200, height=800)
       if (websiteLive) plot(plotEnrich(enriched[[paste("PanglaoDB_Augmented_2021_",m,sep="")]],  numChar = 40, y = "Count", orderBy = "P.value",title = paste("PanglaoDB",m))+plotEnrich(enriched[[paste("CellMarker_Augmented_2021_",m,sep="")]], numChar = 40, y = "Count", orderBy = "P.value",title = paste("CellMarker",m))+plotEnrich(enriched[[paste("Tabula_Sapiens_",m,sep="")]], numChar = 40, y = "Count", orderBy = "P.value",title = paste("Tabula_Sapiens",m)))
+      dev.off()
     }
 
     #Rename indents
     new.cluster.ids <- make.names(annotatedclusters,unique = T)
     names(new.cluster.ids) <- levels(loaded.dataSO.combined)
     loaded.dataSO.combined <- RenameIdents(loaded.dataSO.combined, new.cluster.ids)
-
+    jpeg(file=paste(subDir,"/UMAP_ANNOT3_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(DimPlot(loaded.dataSO.combined, reduction = "umap",label = TRUE))
-
+    dev.off()
     #Change the Labels #issue here if no number after label recheck!!!!
     loaded.dataSO.combined$celltype.label <- paste(Idents(loaded.dataSO.combined), gsub("[0-9]+","",loaded.dataSO.combined$orig.ident), sep = "_")
     loaded.dataSO.combined$label <- gsub("[0-9]+","",loaded.dataSO.combined$orig.ident)
     loaded.dataSO.combined$celltype <- Idents(loaded.dataSO.combined)
 
+    jpeg(file=paste(subDir,"/UMAP_ANNOT3_SPLIT_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)  
     plot(DimPlot(loaded.dataSO.combined, reduction = "umap", split.by = "label",label = TRUE))
+    dev.off()
     
     n <- length(unique(loaded.dataSO.combined$label))
     qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
     col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
     cols_to_use<-sample(col_vector, n)
     markers.to.plot <- unique(loaded.dataSO.combined.markerstop2$gene)
+    
+    jpeg(file=paste(subDir,"/TOP2_MARKERS_DOT_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(DotPlot(loaded.dataSO.combined, features = markers.to.plot, cols = cols_to_use, dot.scale = 8, split.by = "label")) +
       RotatedAxis()
+    dev.off()
+    jpeg(file=paste(subDir,"/TOP1_MARKERS_DOT_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(DotPlot(loaded.dataSO.combined, features = c(loaded.dataSO.combined.markerstop1$gene[1]), cols = cols_to_use, dot.scale = 8, split.by = "label") )+
       RotatedAxis()
+    dev.off()
+    jpeg(file=paste(subDir,"/TOP1_MARKERS_VOL_",disease,".jpg",sep=""),
+         width=1000, height=800,res=100)
     plot(VlnPlot(loaded.dataSO.combined, features = c(loaded.dataSO.combined.markerstop1$gene[1]),split.by = "label",split.plot = TRUE))
-
+    dev.off()
   }
 
   xx <- as.list(GOTERM)
@@ -537,7 +580,10 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
   }
 
   # What proportion of cells are in each cluster?
+  jpeg(file=paste(subDir,"/ALL_CELLS_PROP_",disease,".jpg",sep=""),
+       width=1000, height=800,res=100)
   pie(prop.table(table(loaded.dataSO.combined[[usercelltype]][,1])),main = "Proportion of cells per cell-type")
+  dev.off()
   #prop.table(table(Idents(loaded.dataSO.combined))) #same result
 
   # How does cluster membership vary by condition?
