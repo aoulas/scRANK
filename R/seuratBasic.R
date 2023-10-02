@@ -28,6 +28,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
       cat ("\n");
     }
   }
+  
   if(scenario !="Hypothesis" && scenario !="Malacards"){
     cat("Argument scenario can only take values 'Malacards' or 'Hypothesis'")
     cat ("\n");
@@ -36,6 +37,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
     cat(paste("Argument Scenario =", scenario));
     cat ("\n");
   }
+  
   if(scenario=="Hypothesis"){
     if (missing(keywordsWikiUser)) {
       cat("If Hypothesis scenario is selected the argument keywordsWikiUser must also be provided")
@@ -90,8 +92,19 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
       cat("\n\n");
     }
   }
-  print(paste("Starting Analysis for",disease,sep=" "))
   setwd(path)
+  if(checkdrug==FALSE){ 
+    if(!file.exists("drug_repurposing_hub.txt")){
+      cat("For the option of checkdrug==FALSE, you need to supply a drug repusporing database file, you can download one with the scRANK test data here: https://bioinformatics.cing.ac.cy/downloads/scRNA/LAM.tar.gz")
+      cat ("\n");
+      stop("Execution terminated")
+    }else{
+      cat(paste("Argument checkdrug =", checkdrug));
+      cat("\n\n");
+    }
+  }
+  print(paste("Starting Analysis for",disease,sep=" "))
+  
 
 
 
@@ -506,7 +519,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
     keywordsMOA<-as.array(keywordsMOA[,1])
     termsMOA<-keywordsMOA
   }else{
-    drugInfo<-read.delim("../drug_repurposing_hub.txt")
+    drugInfo<-read.delim("drug_repurposing_hub.txt")
     keywordsMOA<-keywordsMOAUser
 
     termsMOA<-c()
