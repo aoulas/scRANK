@@ -129,7 +129,9 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
 
   #remove directory with html files
   indexhtmlfiles<-grep("*_files",dirs)
-  dirs<-dirs[-indexhtmlfiles]
+  if(length(indexhtmlfiles) !=0){
+    dirs<-dirs[-indexhtmlfiles]
+  }
   #start from 2 to avoid home directory
   for(i in 2:length(dirs)){
     data_dir<-dirs[i]
@@ -138,8 +140,8 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
     #check if dir contains seurat raw data using different formats (rds, H5, ect)
     foundfalse<-which(c("barcodes.tsv","genes.tsv","matrix.mtx") %in% filesindir==FALSE)
 
-    foundH5<-grep("h5",filesindir)
-    foundrds<-grep("rds",filesindir)
+    foundH5<-grep("\\.h5",filesindir)
+    foundrds<-grep("\\.rds",filesindir)
     foundmeta<-"meta.txt"%in% filesindir
     if(length(foundfalse)==0){
       # Load the dataset
@@ -425,10 +427,10 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
 
   if(scenario=="Malacards"){
     #Decided to include all the pathways in the KEGG to increase chances of finding KEGG and MSIG pathways
-    KEGG<-list.files(pattern = "PathwaysKEGG.txt")
-    GOs<-list.files(pattern = "PathwaysGO.txt")
-    React<-list.files(pattern = "PathwaysReactome.txt")
-    Wiki<-list.files(pattern = "PathwaysWiki.txt")
+    KEGG<-list.files(pattern = paste(disease,"PathwaysKEGG.txt",sep=""))
+    GOs<-list.files(pattern = paste(disease,"PathwaysGO.txt",sep=""))
+    React<-list.files(pattern = paste(disease,"PathwaysReactome.txt",sep=""))
+    Wiki<-list.files(pattern = paste(disease,"PathwaysWiki.txt",sep=""))
 
     file.size(Wiki) == 0L
     keywordsWiki<-read.table(Wiki, header=F, sep="\t")
