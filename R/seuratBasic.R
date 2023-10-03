@@ -2,10 +2,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
   library(enrichR)
   library(ReactomeContentService4R)
   library(GO.db)
-  subDir <- "Figures"
-  if (!file.exists(subDir)){
-    dir.create(file.path(path, subDir))
-  }
+  
   if (missing(disease)) cat("Argument disease is missing") else cat(paste("Argument disease =", disease));
   cat ("\n");
   if (missing(path)) cat("Argument path is missing") else cat(paste("Argument path =", path));
@@ -97,6 +94,12 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
     }
   }
   setwd(path)
+  subDir <- "Figures"
+  if (!file.exists(subDir)){
+    dir.create(file.path(path, subDir))
+    print("Directory 'Figures' created")
+  }
+  
   if(checkdrug==FALSE){ 
     if(!file.exists("drug_repurposing_hub.txt")){
       cat("For the option of checkdrug==FALSE, you need to supply a drug repusporing database file, you can download one with the scRANK test data here: https://bioinformatics.cing.ac.cy/downloads/scRNA/LAM.tar.gz")
