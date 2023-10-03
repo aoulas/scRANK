@@ -1,5 +1,9 @@
 rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowledgePathsGO,priorknowledgePathsMSIG,priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeMOA,labels,cellIDs,checkdrug,scenario){
-
+  subDir <- "Figures"
+  if (!file.exists(subDir)){
+    dir.create(file.path(path, subDir))
+    print("Directory 'Figures' created")
+  }
   seuratObject$labels.cellIDs <- paste(as.character(seuratObject[[labels]][,1]), as.character(seuratObject[[cellIDs]][,1]), sep = "_")
   Idents(seuratObject) <- "labels.cellIDs"
 
