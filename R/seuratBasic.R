@@ -562,7 +562,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,scenario="Malacards",check
   }
 
   if(checkdrug==TRUE){
-    Drugs<-list.files(pattern = "DrugsSorted.txt")
+    Drugs<-list.files(pattern = paste(disease,"DrugsSorted.txt",sep=""))
     keywordsMOA<-read.table(Drugs, header=F, sep="\t")
     keywordsMOA<-as.array(keywordsMOA[,1])
     termsMOA<-keywordsMOA
