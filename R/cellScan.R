@@ -471,24 +471,24 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
   }else{
     rownames(EucValues)<-"Bulk"
   }
-  write.table(Ranks,paste("Ranks",scenario,"PlusWikiReactFinalPac.txt",sep=""),quote = F,row.names = T,sep = "\t")
-  write.table(EucValues,paste("EucValues",scenario,"PlusWikiReactFinalPac.txt",sep=""),quote = F,row.names = T,sep = "\t")
+  write.table(Ranks,paste("Ranks",scenario,"PlusWikiReactFinalPac",scan,".txt",sep=""),quote = F,row.names = T,sep = "\t")
+  write.table(EucValues,paste("EucValues",scenario,"PlusWikiReactFinalPac",scan,".txt",sep=""),quote = F,row.names = T,sep = "\t")
 
   MeanRanks<-as.data.frame(meanranks(t(Ranks))$mean.ranks)
   colnames(MeanRanks)<-c("Mean Ranking")
   MeanRanks<-arrange(MeanRanks,MeanRanks$`Mean Ranking`)
 
-  write.table(MeanRanks,paste("MeanRanks",scenario,"PlusWikiReactFinalPac.txt",sep=""),quote = F,row.names = T,sep = "\t")
+  write.table(MeanRanks,paste("MeanRanks",scenario,"PlusWikiReactFinalPac",scan,".txt",sep=""),quote = F,row.names = T,sep = "\t")
 
 
   Allavelog2FC<-as.data.frame(listofCellRanks[[9]])
-  write.table(Allavelog2FC,"Allavelog2FCPac.txt",quote = F,row.names = T,sep = "\t")
+  write.table(Allavelog2FC,"Allavelog2FCPac",scan,".txt",quote = F,row.names = T,sep = "\t")
 
   TotalNumberDEGs<-as.data.frame(listofCellRanks[[10]])
   TotalNumberDEGs$Var1<-rownames(TotalNumberDEGs)
   TotalNumberDEGs<-as.data.frame(TotalNumberDEGs)
   TotalNumberDEGs <-TotalNumberDEGs[order(TotalNumberDEGs$Var1), ]
-  write.table(TotalNumberDEGs,"TotalNumberDEGsPac.txt",quote = F,row.names = T,sep = "\t")
+  write.table(TotalNumberDEGs,"TotalNumberDEGsPac",scan,".txt",quote = F,row.names = T,sep = "\t")
 
   if(scan=="Cell"){
     # # How many cells are in each cell type or condition?
