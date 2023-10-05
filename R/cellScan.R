@@ -482,13 +482,13 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
 
 
   Allavelog2FC<-as.data.frame(listofCellRanks[[9]])
-  write.table(Allavelog2FC,"Allavelog2FCPac",scan,".txt",quote = F,row.names = T,sep = "\t")
+  write.table(Allavelog2FC,paste("Allavelog2FCPac",scan,".txt",sep=""),quote = F,row.names = T,sep = "\t")
 
   TotalNumberDEGs<-as.data.frame(listofCellRanks[[10]])
   TotalNumberDEGs$Var1<-rownames(TotalNumberDEGs)
   TotalNumberDEGs<-as.data.frame(TotalNumberDEGs)
   TotalNumberDEGs <-TotalNumberDEGs[order(TotalNumberDEGs$Var1), ]
-  write.table(TotalNumberDEGs,"TotalNumberDEGsPac",scan,".txt",quote = F,row.names = T,sep = "\t")
+  write.table(TotalNumberDEGs,paste("TotalNumberDEGsPac",scan,".txt",sep=""),quote = F,row.names = T,sep = "\t")
 
   if(scan=="Cell"){
     # # How many cells are in each cell type or condition?
