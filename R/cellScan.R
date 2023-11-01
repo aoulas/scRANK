@@ -451,7 +451,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
   Ranks<-c()
   EucValues<-c()
   for(li in c(1,2,3,4,5,6)){
-    print(li)
+    #print(li)
     fromlist<-as.data.frame(listofCellRanks[[li]])
     fromlist[,2]<-as.numeric(fromlist[,2])
     fromlist <- arrange(fromlist, fromlist[,2])
