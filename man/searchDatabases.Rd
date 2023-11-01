@@ -60,7 +60,6 @@ searchDatabases(
 %%  ~~ If necessary, more details than the description above ~~
 Two options for this function to work 1) For the Malacards scenario, this function works with the output of the extractMalacards() function. This extracts prior knowledge output files which should be saved in the same path/diretory as the one containing the data. 2) For the Hypothesis scenario the user has to supply the prior knowledge. The function will then scan the relevant databases and return the results for inspection.
 }
-}
 \value{
 \item{disease }{A Character string with the name of disease}
 \item{path }{A Character string with a valid path to the directory containing the scRNA-Seq data.}
