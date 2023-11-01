@@ -3,10 +3,10 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 %%  ~~function to do ... ~~
+Search Individual Databases for Malacards Terms
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
-Search Individual Databses for Malacards Terms
 }
 \usage{
 searchDatabases(
