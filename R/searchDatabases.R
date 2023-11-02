@@ -226,6 +226,9 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
   
   if(checkdrug==TRUE){
     Drugs<-list.files(pattern = paste(disease,"DrugsSorted.txt$",sep=""))
+    if(file.size(Drugs) == 0L){
+      print(paste(Drugs," is empty, either insert keywords in the file or search Malacards using additonal terms.",sep=""))
+    }
     keywordsMOA<-read.table(Drugs, header=F, sep="\t")
     keywordsMOA<-as.array(keywordsMOA[,1])
     termsMOA<-keywordsMOA
