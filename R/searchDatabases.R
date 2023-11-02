@@ -85,12 +85,17 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
   
   if(scenario=="Malacards"){
     #Decided to include all the pathways in the KEGG to increase chances of finding KEGG and MSIG pathways
-    KEGG<-list.files(pattern = paste(disease,"PathwaysKEGG.txt",sep=""),)
-    GOs<-list.files(pattern = paste(disease,"PathwaysGO.txt",sep=""))
-    React<-list.files(pattern = paste(disease,"PathwaysReactome.txt",sep=""))
-    Wiki<-list.files(pattern = paste(disease,"PathwaysWiki.txt",sep=""))
+    KEGG<-list.files(pattern = paste(disease,"PathwaysKEGG.txt$",sep=""),)
+    GOs<-list.files(pattern = paste(disease,"PathwaysGO.txt$",sep=""))
+    React<-list.files(pattern = paste(disease,"PathwaysReactome.txt$",sep=""))
+    Wiki<-list.files(pattern = paste(disease,"PathwaysWiki.txt$",sep=""))
+    filenamesSD<-c(KEGG,GOs,React,Wiki)
+    for(file in filenamesSD){
+      if(file.size(file) == 0L)
+        print(paste(KEGG," is empty, either insert keywords in the file or search Malacards using additonal terms.",sep=""))
+      }
+    }
     
-    file.size(Wiki) == 0L
     keywordsWiki<-read.table(Wiki, header=F, sep="\t")
     keywordsWiki<-as.array(keywordsWiki[,1])
     keywordsOther<-read.table(KEGG, header=F, sep="\t")
@@ -220,7 +225,7 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
   }
   
   if(checkdrug==TRUE){
-    Drugs<-list.files(pattern = paste(disease,"DrugsSorted.txt",sep=""))
+    Drugs<-list.files(pattern = paste(disease,"DrugsSorted.txt$",sep=""))
     keywordsMOA<-read.table(Drugs, header=F, sep="\t")
     keywordsMOA<-as.array(keywordsMOA[,1])
     termsMOA<-keywordsMOA
