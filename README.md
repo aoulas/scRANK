@@ -49,6 +49,9 @@ path<-"full-path-to-where-data-was-extracted"
 disease<-"LAM"
 extractMalacards(disease = disease,files = c("name-of-html-file"),path = path)
 
+#Search databases with the terms extracted from Malacards (checks also that files generated from extractMalacards() are not empty)
+listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug)
+
 #Define extra arguments for scRANK runBasicAnalysis() function
 annotate<-TRUE
 userlabel<-"label"
@@ -60,9 +63,6 @@ scan<-"Cell"
 #Run basic analysis 
 seuratObject<-runBasicAnalysis(disease = disease,path=path ,annotate = annotate,userlabel = userlabel,
           usercelltype = usercelltype,scenario=scenario)
-
-#Search databases with the terms extracted from Malacards
-listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug)
 
 #Define extra arguments for scRANK rankCells() function
 priorknowledgePathsKEGG<-listofoutput[[1]]
