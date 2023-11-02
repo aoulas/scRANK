@@ -57,18 +57,20 @@ checkdrug<-TRUE
 scenario<-"Malacards"
 scan<-"Cell"
 
-#Run basic analysis and search databases
-listofoutput<-runBasicAnalysis(disease = disease,path=path ,annotate = annotate,userlabel = userlabel,
+#Run basic analysis 
+seuratObject<-runBasicAnalysis(disease = disease,path=path ,annotate = annotate,userlabel = userlabel,
           usercelltype = usercelltype,scenario=scenario)
 
+#Search databases with the terms extracted from Malacards
+listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug)
+
 #Define extra arguments for scRANK rankCells() function
-seuratObject<-listofoutput[[1]]
-priorknowledgePathsKEGG<-listofoutput[[2]]
-priorknowledgePathsGO<-listofoutput[[3]]
-priorknowledgePathsMSIG<-listofoutput[[4]]
-priorknowledgePathsWiki<-listofoutput[[5]]
-priorknowledgePathsReact<-listofoutput[[6]]
-priorknowledgeDRUGSMOA<-listofoutput[[7]]
+priorknowledgePathsKEGG<-listofoutput[[1]]
+priorknowledgePathsGO<-listofoutput[[2]]
+priorknowledgePathsMSIG<-listofoutput[[3]]
+priorknowledgePathsWiki<-listofoutput[[4]]
+priorknowledgePathsReact<-listofoutput[[5]]
+priorknowledgeDRUGSMOA<-listofoutput[[6]]
 
 #Perform mapping and ranking steps - you can use the output from the runBasicAnalysis()
 #directly in the rankCells() function.
