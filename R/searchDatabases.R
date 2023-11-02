@@ -91,7 +91,7 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
     Wiki<-list.files(pattern = paste(disease,"PathwaysWiki.txt$",sep=""))
     filenamesSD<-c(KEGG,GOs,React,Wiki)
     for(file in filenamesSD){
-      if(file.size(file) == 0L)
+      if(file.size(file) == 0L){
         print(paste(KEGG," is empty, either insert keywords in the file or search Malacards using additonal terms.",sep=""))
       }
     }
