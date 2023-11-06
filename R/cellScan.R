@@ -4,6 +4,11 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
     dir.create(file.path(path, subDir))
     print("Directory 'Figures' created")
   }
+  subDirList <- "lists_of_Info"
+  if (!file.exists(subDirList)){
+    dir.create(file.path(path, subDirList))
+    print("Directory 'lists_of_Info' created")
+  }
   seuratObject$labels.cellIDs <- paste(as.character(seuratObject[[labels]][,1]), as.character(seuratObject[[cellIDs]][,1]), sep = "_")
   Idents(seuratObject) <- "labels.cellIDs"
 
@@ -381,6 +386,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             #Checks drugs directly
             matchMOAIndexesOrdered<-match(tolower(priorknowledgeMOA),tolower(iconv(as.character(AlldrugsCellIDs),"ISO-8859-1")))
           }
+          write.table(AlldrugsCellIDs,paste(subDirList,"/Drugs_",cellID,".txt",sep=""),quote = F,row.names = F,col.names = F)
           AlldrugsCellIDs[matchMOAIndexesOrdered[!isNA(matchMOAIndexesOrdered)]]
           sumoffreq<-0
           if(checkdrug==FALSE){
