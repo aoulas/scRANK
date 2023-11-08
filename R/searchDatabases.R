@@ -181,7 +181,7 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
       },
       #if an error occurs, print the error
       error=function(e) {
-        message('An Error Occurred... term was not found in KEGG')
+        message('Warning... term was not found in KEGG')
         print(e)
       },
       #if a warning occurs, print the warning
