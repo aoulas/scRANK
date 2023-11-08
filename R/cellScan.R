@@ -99,7 +99,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             enrichedPaths <- enrichr(c(Up,Down), dbstousePaths)#
           }
           if(scan=="Cell"){
-            jpeg(file=paste(subDir,"/PATHWAYS_",cellID,"_",disease,".jpg",sep=""),
+            jpeg(file=paste(subDir,"/PATHWAYS_",gsub("/","",cellID),"_",disease,".jpg",sep=""),
                  width=1200, height=800)
             if (websiteLive) plot(plotEnrich(enrichedPaths[["KEGG_2021_Human"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("KEGG",cellID,sep=" "))+plotEnrich(enrichedPaths[["GO_Biological_Process_2021"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("GO_Bio_Pro",cellID))+plotEnrich(enrichedPaths[["MSigDB_Hallmark_2020"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("MSigDB",cellID))+plotEnrich(enrichedPaths[["WikiPathway_2021_Human"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("WIKI",cellID))+plotEnrich(enrichedPaths[["Reactome_2022"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("Reactome",cellID)))
             dev.off()
@@ -249,22 +249,24 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
 
           #Create river plot of matches##############################################################################
           # testriver<-c()
+          # indexespriorknowledgePathsWikifound<- which(!is.na(matchWikiIndexesOrdered))
+          # indexespathsWikifound<-matchWikiIndexesOrdered[indexespriorknowledgePathsWikifound]
           # testriver<-data.frame(cbind(priorknowledgePathsWiki[indexespriorknowledgePathsWikifound],pathsWiki[,1][indexespathsWikifound],rep(1,each=length(indexespriorknowledgePathsWikifound))))
           # colnames(testriver)<-c("N1","N2","Value")
           # testriver$Value<-as.numeric(testriver$Value)
           # testriver<-testriver[!duplicated(tolower(testriver$N1)), ]
           # nodes<-data.frame(ID=make.unique(c(priorknowledgePathsWiki,pathsWiki[,1])),x=c(rep(1,each=length(priorknowledgePathsWiki)),rep(2,each=length(pathsWiki[,1]))),y=c(rev(1:length(priorknowledgePathsWiki)),rev(1:length(pathsWiki[,1]))))
-          #
+          # 
           # qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
           # col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
-          #
-          #
+          # 
+          # 
           # style<-list()
           # for(nodei in 1:length(nodes$ID)){
           #   styletemp<-sapply(nodes$ID[nodei],function(id) list(col=sample(col_vector, 1)),simplify=FALSE)
           #   style<-append(style, styletemp, after = length(style))
           # }
-          #
+          # 
           # #dev.off()
           # len<-1000
           # plot(NULL,xlim=c(1,len),ylim=c(1,len),bty="n",xlab="",ylab="",xaxt='n',yaxt='n')
@@ -295,17 +297,17 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
 
           if(scan=="Cell"){
             if(nrow(enrichedUp[["Old_CMAP_down"]]) != 0 && nrow(enrichedDown[["Old_CMAP_up"]]) != 0){
-              jpeg(file=paste(subDir,"/DRUGS_",cellID,"_",disease,".jpg",sep=""),
+              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",cellID),"_",disease,".jpg",sep=""),
                    width=1200, height=800)
               if (websiteLive) plot(plotEnrich(enrichedUp[["Old_CMAP_down"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "UP",sep=" "))+plotEnrich(enrichedDown[["Old_CMAP_up"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "Down",sep=" ")))
               dev.off()
             }else if(nrow(enrichedUp[["Old_CMAP_down"]]) != 0 && nrow(enrichedDown[["Old_CMAP_up"]]) == 0){
-              jpeg(file=paste(subDir,"/DRUGS_",cellID,"_",disease,".jpg",sep=""),
+              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",cellID),"_",disease,".jpg",sep=""),
                    width=1200, height=800)
               if (websiteLive) plot(plotEnrich(enrichedUp[["Old_CMAP_down"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "UP",sep=" ")))
               dev.off()
             }else if(nrow(enrichedUp[["Old_CMAP_down"]]) == 0 && nrow(enrichedDown[["Old_CMAP_up"]]) != 0){
-              jpeg(file=paste(subDir,"/DRUGS_",cellID,"_",disease,".jpg",sep=""),
+              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",cellID),"_",disease,".jpg",sep=""),
                    width=1200, height=800)
               if (websiteLive) plotEnrich(enrichedDown[["Old_CMAP_up"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "Down",sep=" "))
               dev.off()
@@ -386,7 +388,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             #Checks drugs directly
             matchMOAIndexesOrdered<-match(tolower(priorknowledgeMOA),tolower(iconv(as.character(AlldrugsCellIDs),"ISO-8859-1")))
           }
-          write.table(AlldrugsCellIDs,paste(subDirList,"/Drugs_",cellID,".txt",sep=""),quote = F,row.names = F,col.names = F)
+          write.table(AlldrugsCellIDs,paste(subDirList,"/Drugs_",gsub("/","",cellID),".txt",sep=""),quote = F,row.names = F,col.names = F)
           AlldrugsCellIDs[matchMOAIndexesOrdered[!isNA(matchMOAIndexesOrdered)]]
           sumoffreq<-0
           if(checkdrug==FALSE){
