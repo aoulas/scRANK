@@ -77,7 +77,7 @@ plotRanks <-function (filename,title="Rankings"){
 
     geom_dotplot(aes(color=Parameter,fill=Parameter),binaxis = "y", stackdir = "center",dotsize=0.3,position = position_dodge(),binwidth=0.5)+ # dotsize=0.3
 
-    stat_summary(fun.y=mean, aes(shape="average Rank"),geom="point",size=2, color="red", fill="red") +
+    stat_summary(fun=mean, aes(shape="average Rank"),geom="point",size=2, color="red", fill="red") +
     scale_shape_manual("", values=c("average Rank"=24))+
     scale_y_continuous(breaks=seq(0, max(Ranks$Rank),2))+
 
