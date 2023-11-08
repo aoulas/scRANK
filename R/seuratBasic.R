@@ -267,6 +267,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     features <- SelectIntegrationFeatures(object.list = loaded.dataSO.list)
     loaded.dataSO.anchors <- FindIntegrationAnchors(object.list = loaded.dataSO.list, dims = 1:20)#,reference = 1,k.filter = NA,anchor.features = features,verbose = TRUE
     loaded.dataSO.combined <- IntegrateData(anchorset = loaded.dataSO.anchors, dims = 1:20)
+    
     DefaultAssay(loaded.dataSO.combined) <- "integrated"
   }
 
@@ -279,7 +280,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
   #Louvein method or improved Leiden
   loaded.dataSO.combined <- FindNeighbors(loaded.dataSO.combined, reduction = "pca", dims = 1:20)
   loaded.dataSO.combined <- FindClusters(loaded.dataSO.combined, resolution  = 0.3)#was at 0.3
-
+  
   #Can view object
   #loaded.dataSO.combined[[]]
 
@@ -311,7 +312,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     # For performing differential expression after integration, we switch back to the original
     # data
     DefaultAssay(loaded.dataSO.combined) <- "RNA"
-
+    loaded.dataSO.combined<-JoinLayers(loaded.dataSO.combined)
     loaded.dataSO.combined.markers <- FindAllMarkers(loaded.dataSO.combined, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
 
     loaded.dataSO.combined.markerstop1<-loaded.dataSO.combined.markers %>%
@@ -350,7 +351,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     dev.off()
     #FeaturePlot(loaded.dataSO.combined, features = loaded.dataSO.combined.markerstop1$gene[1],label = T)& theme(legend.position = c(0.1,0.2))
 
-    loaded.dataSO.combined <- ScaleData(loaded.dataSO.combined, verbose = FALSE)
+    #loaded.dataSO.combined <- ScaleData(loaded.dataSO.combined, verbose = FALSE)
     
     jpeg(file=paste(subDir,"/TOP2-MARKERS_HEAT_",disease,".jpg",sep=""),
         width=1000, height=800,res=100)
