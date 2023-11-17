@@ -133,6 +133,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     dirs<-dirs[-indexhtmlfiles]
   }
   #start from 2 to avoid home directory
+  #options(Seurat.object.assay.version = "v3")
   for(i in 2:length(dirs)){
     data_dir<-dirs[i]
 
@@ -175,7 +176,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
       #Normalizing the data. Normalized values are stored in UnWounded1[["RNA"]]@data. *
       loaded.dataSO <- NormalizeData(loaded.dataSO)#, normalization.method = "LogNormalize", scale.factor = 10000)
       #Identification of highly variable features (feature selection) *
-      loaded.dataSO <- FindVariableFeatures(loaded.dataSO, selection.method = "vst", nfeatures = 2000)
+      loaded.dataSO <- FindVariableFeatures(loaded.dataSO, selection.method = "vst", nfeatures = 2000) 
 
       loaded.dataSO.list<-c(loaded.dataSO.list,loaded.dataSO)
     }else if(length(foundH5) !=0){
@@ -259,18 +260,19 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     plot(plot2)
     dev.off()
   }else{
-    loaded.dataSO.combined <-loaded.dataSO
+    #loaded.dataSO.combined <-loaded.dataSO
     jpeg(file=paste(subDir,"/FEATURE_PLOT_",disease,".jpg",sep=""),
          width=1000, height=800,res=100)
     do.call("grid.arrange", c(plot.list))#, ncol = (index-1))
     dev.off()
     features <- SelectIntegrationFeatures(object.list = loaded.dataSO.list)
     loaded.dataSO.anchors <- FindIntegrationAnchors(object.list = loaded.dataSO.list, dims = 1:20)#,reference = 1,k.filter = NA,anchor.features = features,verbose = TRUE
+    #options(Seurat.object.assay.version = "v4")
     loaded.dataSO.combined <- IntegrateData(anchorset = loaded.dataSO.anchors, dims = 1:20)
     
     DefaultAssay(loaded.dataSO.combined) <- "integrated"
   }
-
+  
   # Run the standard workflow for visualization and clustering
   loaded.dataSO.combined <- ScaleData(loaded.dataSO.combined, verbose = FALSE)
   loaded.dataSO.combined <- RunPCA(loaded.dataSO.combined, npcs = 30, verbose = FALSE)
@@ -280,10 +282,9 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
   #Louvein method or improved Leiden
   loaded.dataSO.combined <- FindNeighbors(loaded.dataSO.combined, reduction = "pca", dims = 1:20)
   loaded.dataSO.combined <- FindClusters(loaded.dataSO.combined, resolution  = 0.3)#was at 0.3
-  
+  #loaded.dataSO.combined[["RNA"]] <- as(object = loaded.dataSO.combined[["RNA"]], Class = "Assay")
   #Can view object
   #loaded.dataSO.combined[[]]
-
   if(annotate==FALSE){
     p1combined <- DimPlot(loaded.dataSO.combined, reduction = "umap", group.by = userlabel)
   }
@@ -312,9 +313,12 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     # For performing differential expression after integration, we switch back to the original
     # data
     DefaultAssay(loaded.dataSO.combined) <- "RNA"
-    loaded.dataSO.combined<-JoinLayers(loaded.dataSO.combined)
+    loaded.dataSO.combined[["RNA"]]<-JoinLayers(loaded.dataSO.combined[["RNA"]])
+    # loaded.dataSO.combined <- IntegrateLayers(object = loaded.dataSO.combined, method = CCAIntegration, orig.reduction = "pca", new.reduction = "integrated.cca",
+    #                         verbose = FALSE)
+    #loaded.dataSO.combined[["RNA"]] <- as(object = loaded.dataSO.combined[["RNA"]], Class = "Assay")
     loaded.dataSO.combined.markers <- FindAllMarkers(loaded.dataSO.combined, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
-
+    
     loaded.dataSO.combined.markerstop1<-loaded.dataSO.combined.markers %>%
       group_by(cluster) %>%
       slice_max(n = 1, order_by = avg_log2FC) #100 gives best results
@@ -351,7 +355,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     dev.off()
     #FeaturePlot(loaded.dataSO.combined, features = loaded.dataSO.combined.markerstop1$gene[1],label = T)& theme(legend.position = c(0.1,0.2))
 
-    #loaded.dataSO.combined <- ScaleData(loaded.dataSO.combined, verbose = FALSE)
+    #loaded.dataSO.combined <- ScaleData(loaded.dataSO.combined, verbose = FALSE) #this needs to be removed for JoinLayers
     
     jpeg(file=paste(subDir,"/TOP2-MARKERS_HEAT_",disease,".jpg",sep=""),
         width=1000, height=800,res=100)
