@@ -19,6 +19,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
 
   #Make sure Assay is RNA
   DefaultAssay(seuratObject) <- "RNA"
+  Layers(seuratObject[["RNA"]])
   tablecellclounts <-table(seuratObject@meta.data$nCount_RNA, seuratObject@meta.data$labels.cellIDs)
   tablecellclounts<-as.data.frame(colSums(tablecellclounts))
   #seuratObjectcellIDmatchesMOA<-c()
@@ -59,7 +60,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
 
     if(length(indexcountsCondition1) !=0 && length(indexcountsCondition2) !=0){
       if((scan=="Cell" && tablecellclounts[indexcountsCondition1,] > 3 && tablecellclounts[indexcountsCondition2,] > 3) || (scan=="Bulk")){
-        seuratObject.markersCellIDs <- FindMarkers(seuratObject, ident.1 = Condition1, ident.2 = Condition2, verbose = FALSE)
+        seuratObject.markersCellIDs <- FindMarkers(seuratObject, ident.1 = Condition1, ident.2 = Condition2, verbose = FALSE,logfc.threshold = 0.25,min.pct = 0.1)
 
         indexsigclCellIDs<-which(seuratObject.markersCellIDs$p_val_adj<=0.05)
         seuratObject.markersCellIDs_sig<-seuratObject.markersCellIDs[indexsigclCellIDs,]
@@ -142,16 +143,34 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
           #KEGG Euclidean
           matchKEGGIndexesOrdered<-match(tolower(priorknowledgePathsKEGG),tolower(iconv(as.character(paths[,1]),"ISO-8859-1")))
           if(length(unique(matchKEGGIndexesOrdered)) == 1 && is.na(unique(matchKEGGIndexesOrdered))){
+            matchKEGGIndexesOrderedFinger<-matchKEGGIndexesOrdered
+            matchKEGGIndexesOrderedFinger[which(is.na(matchKEGGIndexesOrdered))]<-0
             matchKEGGIndexesOrdered<-tidyr::replace_na(matchKEGGIndexesOrdered,1000)
           }else{
+            matchKEGGIndexesOrderedFinger<-matchKEGGIndexesOrdered
+            matchKEGGIndexesOrderedFinger[which(is.na(matchKEGGIndexesOrdered))]<-0
             matchKEGGIndexesOrdered<-tidyr::replace_na(matchKEGGIndexesOrdered,(length(priorknowledgePathsKEGG)+1000))
           }
 
           euclidean <- function(a, b) sqrt(sum((a - b)^2))
+          jaccard2 <- function(a, b) {
+            intersection = length(intersect(a, b))
+            union = length(a) + length(b) - intersection
+            return (intersection/union)
+          }
           if(is.null(priorknowledgePathsKEGG)){
             celleucpathKEGG<-1000
           }else{
             celleucpathKEGG<-euclidean(c(1:length(priorknowledgePathsKEGG)),matchKEGGIndexesOrdered)
+            priorknowledgePathsKEGGFinger<-rep(1,length(priorknowledgePathsKEGG))
+            matchKEGGIndexesOrderedFinger[which(matchKEGGIndexesOrderedFinger!=0)]<-1
+            celljacpathKEGG<-jaccard(priorknowledgePathsKEGGFinger,matchKEGGIndexesOrderedFinger)
+            #jaccard2(priorknowledgePathsWikiFinger,matchWikiIndexesOrderedFinger)
+            if(celljacpathKEGG !=0){
+              celleucpathKEGG<-celleucpathKEGG/celljacpathKEGG
+            }else{
+              celleucpathKEGG<-celleucpathKEGG/0.000001
+            }
           }
           seuratObjectcellIDmatchesPATHSEuc<-rbind(seuratObjectcellIDmatchesPATHSEuc,cbind(cellID,celleucpathKEGG))
 
@@ -162,8 +181,12 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
           #GO Terms Euclidean
           matchGOIndexesOrdered<-match(tolower(priorknowledgePathsGO),tolower(iconv(as.character(gsub(" +\\(GO.[0-9]+\\)","",pathsGO[,1])),"ISO-8859-1")))
           if(length(unique(matchGOIndexesOrdered)) == 1 && is.na(unique(matchGOIndexesOrdered))){
+            matchGOIndexesOrderedFinger<-matchGOIndexesOrdered
+            matchGOIndexesOrderedFinger[which(is.na(matchGOIndexesOrdered))]<-0
             matchGOIndexesOrdered<-tidyr::replace_na(matchGOIndexesOrdered,1000)
           }else{
+            matchGOIndexesOrderedFinger<-matchGOIndexesOrdered
+            matchGOIndexesOrderedFinger[which(is.na(matchGOIndexesOrdered))]<-0
             matchGOIndexesOrdered<-tidyr::replace_na(matchGOIndexesOrdered,(length(priorknowledgePathsGO)+1000))
           }
 
@@ -171,6 +194,15 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             celleucpathGO<-1000
           }else{
             celleucpathGO<-euclidean(c(1:length(priorknowledgePathsGO)),matchGOIndexesOrdered)
+            priorknowledgePathsGOFinger<-rep(1,length(priorknowledgePathsGO))
+            matchGOIndexesOrderedFinger[which(matchGOIndexesOrderedFinger!=0)]<-1
+            celljacpathGO<-jaccard(priorknowledgePathsGOFinger,matchGOIndexesOrderedFinger)
+            #jaccard2(priorknowledgePathsWikiFinger,matchWikiIndexesOrderedFinger)
+            if(celljacpathGO !=0){
+              celleucpathGO<-celleucpathGO/celljacpathGO
+            }else{
+              celleucpathGO<-celleucpathGO/0.000001
+            }
           }
           seuratObjectcellIDmatchesPATHSGOEuc<-rbind(seuratObjectcellIDmatchesPATHSGOEuc,cbind(cellID,celleucpathGO))
 
@@ -187,8 +219,12 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
           }
           matchMSIGIndexesOrdered<-match(tolower(priorknowledgePathsMSIG),formattedMSIG)
           if(length(unique(matchMSIGIndexesOrdered)) == 1 && is.na(unique(matchMSIGIndexesOrdered))){
+            matchMSIGIndexesOrderedFinger<-matchMSIGIndexesOrdered
+            matchMSIGIndexesOrderedFinger[which(is.na(matchMSIGIndexesOrdered))]<-0
             matchMSIGIndexesOrdered<-tidyr::replace_na(matchMSIGIndexesOrdered,1000)
           }else{
+            matchMSIGIndexesOrderedFinger<-matchMSIGIndexesOrdered
+            matchMSIGIndexesOrderedFinger[which(is.na(matchMSIGIndexesOrdered))]<-0
             matchMSIGIndexesOrdered<-tidyr::replace_na(matchMSIGIndexesOrdered,(length(priorknowledgePathsMSIG)+1000))
           }
 
@@ -196,6 +232,15 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             celleucpathMSIG<-1000
           }else{
             celleucpathMSIG<-euclidean(c(1:length(priorknowledgePathsMSIG)),matchMSIGIndexesOrdered)
+            priorknowledgePathsMSIGFinger<-rep(1,length(priorknowledgePathsMSIG))
+            matchMSIGIndexesOrderedFinger[which(matchMSIGIndexesOrderedFinger!=0)]<-1
+            celljacpathMSIG<-jaccard(priorknowledgePathsMSIGFinger,matchMSIGIndexesOrderedFinger)
+            #jaccard2(priorknowledgePathsWikiFinger,matchWikiIndexesOrderedFinger)
+            if(celljacpathMSIG !=0){
+              celleucpathMSIG<-celleucpathMSIG/celljacpathMSIG
+            }else{
+              celleucpathMSIG<-celleucpathMSIG/0.000001
+            }
           }
           seuratObjectcellIDmatchesPATHSMSIGEuc<-rbind(seuratObjectcellIDmatchesPATHSMSIGEuc,cbind(cellID,celleucpathMSIG))
 
@@ -216,17 +261,39 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
           }
           matchWikiIndexesOrdered<-match(tolower(priorknowledgePathsWiki),tolower(iconv(as.character(gsub(" +WP[0-9]+","",pathsWiki[,1])),"ISO-8859-1")))
           if(length(unique(matchWikiIndexesOrdered)) == 1 && is.na(unique(matchWikiIndexesOrdered))){
+            matchWikiIndexesOrderedFinger<-matchWikiIndexesOrdered
+            matchWikiIndexesOrderedFinger[which(is.na(matchWikiIndexesOrdered))]<-0
+            #priorknowledgePathsWikiFinger<-c(1:length(priorknowledgePathsWiki))
+            #priorknowledgePathsWikiFinger[which(is.na(matchWikiIndexesOrdered))]<-0
             matchWikiIndexesOrdered<-rep(1000,length(matchWikiIndexesOrdered))
           }else{
+            matchWikiIndexesOrderedFinger<-matchWikiIndexesOrdered
+            matchWikiIndexesOrderedFinger[which(is.na(matchWikiIndexesOrdered))]<-0
+            #priorknowledgePathsWikiFinger<-c(1:length(priorknowledgePathsWiki))
+            #priorknowledgePathsWikiFinger[which(is.na(matchWikiIndexesOrdered))]<-0
             matchWikiIndexesOrdered<-tidyr::replace_na(matchWikiIndexesOrdered,(length(priorknowledgePathsWiki)+1000))
           }
-
+          
           if(is.null(priorknowledgePathsWiki)){
             celleucpathWiki<-1000
           }else{
             celleucpathWiki<-euclidean(c(1:length(priorknowledgePathsWiki)),matchWikiIndexesOrdered)
+            #priorknowledgePathsWikiFinger[which(priorknowledgePathsWikiFinger!=0)]<-1
+            priorknowledgePathsWikiFinger<-rep(1,length(priorknowledgePathsWiki))
+            matchWikiIndexesOrderedFinger[which(matchWikiIndexesOrderedFinger!=0)]<-1
+            celljacpathWiki<-jaccard(priorknowledgePathsWikiFinger,matchWikiIndexesOrderedFinger)
+            #jaccard2(priorknowledgePathsWikiFinger,matchWikiIndexesOrderedFinger)
+            if(celljacpathWiki !=0){
+              celleucpathWiki<-celleucpathWiki/celljacpathWiki
+            }else{
+              celleucpathWiki<-celleucpathWiki/0.000001
+            }
           }
-
+          
+          
+          
+          
+          
           seuratObjectcellIDmatchesPATHSWikiEuc<-rbind(seuratObjectcellIDmatchesPATHSWikiEuc,cbind(cellID,celleucpathWiki))
 
           indexespriorknowledgePathsWikifound<- which(!is.na(indexfindfuzz))
@@ -235,8 +302,12 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
           #Reactome Euclidean
           matchReactIndexesOrdered<-match(tolower(priorknowledgePathsReact),tolower(iconv(as.character(gsub(" +R-HSA-[0-9]+","",pathsReact[,1])),"ISO-8859-1")))
           if(length(unique(matchReactIndexesOrdered)) == 1 && is.na(unique(matchReactIndexesOrdered))){
+            matchReactIndexesOrderedFinger<-matchReactIndexesOrdered
+            matchReactIndexesOrderedFinger[which(is.na(matchReactIndexesOrdered))]<-0
             matchReactIndexesOrdered<-tidyr::replace_na(matchReactIndexesOrdered,1000)
           }else{
+            matchReactIndexesOrderedFinger<-matchReactIndexesOrdered
+            matchReactIndexesOrderedFinger[which(is.na(matchReactIndexesOrdered))]<-0
             matchReactIndexesOrdered<-tidyr::replace_na(matchReactIndexesOrdered,(length(priorknowledgePathsReact)+1000))
           }
 
@@ -244,12 +315,22 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             celleucpathReact<-1000
           }else{
             celleucpathReact<-euclidean(c(1:length(priorknowledgePathsReact)),matchReactIndexesOrdered)
+            priorknowledgePathsReactFinger<-rep(1,length(priorknowledgePathsReact))
+            matchReactIndexesOrderedFinger[which(matchReactIndexesOrderedFinger!=0)]<-1
+            celljacpathReact<-jaccard(priorknowledgePathsReactFinger,matchReactIndexesOrderedFinger)
+            #jaccard2(priorknowledgePathsWikiFinger,matchWikiIndexesOrderedFinger)
+            if(celljacpathReact !=0){
+              celleucpathReact<-celleucpathReact/celljacpathReact
+            }else{
+              celleucpathReact<-celleucpathReact/0.000001
+            }
           }
           seuratObjectcellIDmatchesPATHSReactEuc<-rbind(seuratObjectcellIDmatchesPATHSReactEuc,cbind(cellID,celleucpathReact))
 
           #Create river plot of matches##############################################################################
           # testriver<-c()
-          # indexespriorknowledgePathsWikifound<- which(!is.na(matchWikiIndexesOrdered))
+          # #indexespriorknowledgePathsWikifound<- which(!is.na(matchWikiIndexesOrdered))
+          # indexespriorknowledgePathsWikifound<- which(!matchWikiIndexesOrdered>1000)
           # indexespathsWikifound<-matchWikiIndexesOrdered[indexespriorknowledgePathsWikifound]
           # testriver<-data.frame(cbind(priorknowledgePathsWiki[indexespriorknowledgePathsWikifound],pathsWiki[,1][indexespathsWikifound],rep(1,each=length(indexespriorknowledgePathsWikifound))))
           # colnames(testriver)<-c("N1","N2","Value")
@@ -395,8 +476,12 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             sumoffreq<-sum(tableMOAs$Freq[matchMOAIndexesOrdered][!is.na(tableMOAs$Freq[matchMOAIndexesOrdered])])
           }
           if(length(unique(matchMOAIndexesOrdered)) == 1 && is.na(unique(matchMOAIndexesOrdered))){
+            matchMOAIndexesOrderedFinger<-matchMOAIndexesOrdered
+            matchMOAIndexesOrderedFinger[which(is.na(matchMOAIndexesOrdered))]<-0
             matchMOAIndexesOrdered<-tidyr::replace_na(matchMOAIndexesOrdered,1000)
           }else{
+            matchMOAIndexesOrderedFinger<-matchMOAIndexesOrdered
+            matchMOAIndexesOrderedFinger[which(is.na(matchMOAIndexesOrdered))]<-0
             matchMOAIndexesOrdered<-tidyr::replace_na(matchMOAIndexesOrdered,(length(AlldrugsCellIDs)+1))
           }
           
@@ -408,8 +493,26 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
           if(!is.na(sumoffreq) && sumoffreq !=0 && checkdrug==FALSE){
             celleuc<-euclidean(c(1:length(priorknowledgeMOA)),matchMOAIndexesOrdered)
             celleuc<-celleuc/sumoffreq
+            priorknowledgeMOAFinger<-rep(1,length(priorknowledgeMOA))
+            matchMOAIndexesOrderedFinger[which(matchMOAIndexesOrderedFinger!=0)]<-1
+            celljacMOA<-jaccard(priorknowledgeMOAFinger,matchMOAIndexesOrderedFinger)
+            #jaccard2(priorknowledgePathsWikiFinger,matchWikiIndexesOrderedFinger)
+            if(celljacMOA !=0){
+              celleuc<-celleuc/celljacMOA
+            }else{
+              celleuc<-celleuc/0.000001
+            }
           }else{
             celleuc<-euclidean(c(1:length(priorknowledgeMOA)),matchMOAIndexesOrdered)
+            priorknowledgeMOAFinger<-rep(1,length(priorknowledgeMOA))
+            matchMOAIndexesOrderedFinger[which(matchMOAIndexesOrderedFinger!=0)]<-1
+            celljacMOA<-jaccard(priorknowledgeMOAFinger,matchMOAIndexesOrderedFinger)
+            #jaccard2(priorknowledgePathsWikiFinger,matchWikiIndexesOrderedFinger)
+            if(celljacMOA !=0){
+              celleuc<-celleuc/celljacMOA
+            }else{
+              celleuc<-celleuc/0.000001
+            }
           }
           seuratObjectcellIDmatchesMOAEuc<-rbind(seuratObjectcellIDmatchesMOAEuc,cbind(cellID,celleuc))
           # if(nposMOA==0){
