@@ -21,7 +21,7 @@ plotCellChat <-function (filename,title="CellChat Rankings"){
 
 
     #CellChat$CellID<-gsub("Lymph.Node.cd1c.positive.Myeloid.Dendritic.Cell","Myeloid.Dendritic.Cell",CellChat$CellID)
-
+    suppressWarnings(
     p<-ggplot(data = CellChat,aes(x =  reorder(CellID,Fold.Diff..Inter.,FUN = max,decreasing = TRUE), y=Fold.Diff..Inter.)) +
 
       geom_bar(stat="identity",position=position_dodge())+#,
@@ -35,9 +35,13 @@ plotCellChat <-function (filename,title="CellChat Rankings"){
       ggtitle(title) +
       ylab("LogFDI")+
       xlab("")
+    )
+    suppressWarnings(
     p<-p+theme(plot.title = element_text(size = 15, face = "bold"),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.text=element_text(size=15),
                axis.title=element_text(size=15,face="bold"),legend.text=element_text(size=15),legend.title=element_text(size=15),axis.text.y = element_text(color=colsbulk))
+    )
     p<-p + coord_flip()
+    
     print(p)
 
 }
@@ -55,11 +59,9 @@ plotRanks <-function (filename,title="Rankings"){
   rownames(MeanRanks)<-CellIDS
   MeanRanks<-cbind(CellIDS,MeanRanks)
   MeanRanks<-MeanRanks[order(MeanRanks$`apply(Ranks, 1, mean)`,decreasing = T),]
-  #if(Disease=="MM"){
-   # indexBulk<-15
-  #}else{
+  
   indexBulk<-which(MeanRanks$CellIDS=="Bulk")
-  #}
+  
   colsbulk<-c(rep('black',length(CellIDS)))
   colsbulk[indexBulk]<-"red"
 
@@ -68,29 +70,30 @@ plotRanks <-function (filename,title="Rankings"){
 
   Ranks<-cbind(CellIDS,Ranks)
 
-  Ranks$CellIDS<-gsub("Lymph.Node.cd1c.positive.Myeloid.Dendritic.Cell","Myeloid.Dendritic.Cell",Ranks$CellIDS)
-
-  p<-ggplot(data = Ranks,aes(x =  reorder(CellIDS,Rank,FUN = mean,decreasing = TRUE), y = Rank)) +#, color=grey
-    geom_boxplot(outlier.colour = NA,color=colsbulk) +
-
-    guides(color = "none")  +
-
-    geom_dotplot(aes(color=Parameter,fill=Parameter),binaxis = "y", stackdir = "center",dotsize=0.3,position = position_dodge(),binwidth=0.5)+ # dotsize=0.3
-
-    stat_summary(fun=mean, aes(shape="average Rank"),geom="point",size=2, color="red", fill="red") +
-    scale_shape_manual("", values=c("average Rank"=24))+
-    scale_y_continuous(breaks=seq(0, max(Ranks$Rank),2))+
-
-  theme_bw()+
-    theme(axis.text=element_text(size=15),axis.text.y = element_text(color=colsbulk),
-          axis.title=element_text(size=15,face="bold"),legend.text=element_text(size=15),legend.title=element_text(size=15))+
-
-
-    ggtitle(title) +#cellID_i
-    xlab("")+
-    ylab("Rank")
-
+  #Ranks$CellIDS<-gsub("Lymph.Node.cd1c.positive.Myeloid.Dendritic.Cell","Myeloid.Dendritic.Cell",Ranks$CellIDS)
+  suppressWarnings(
+    p<-ggplot(data = Ranks,aes(x =  reorder(CellIDS,Rank,FUN = mean,decreasing = TRUE), y = Rank)) +#, color=grey
+      geom_boxplot(outlier.colour = NA,color=colsbulk) +
+      
+      guides(color = "none")  +
+      
+      geom_dotplot(aes(color=Parameter,fill=Parameter),binaxis = "y", stackdir = "center",dotsize=0.3,position = position_dodge(),binwidth=0.5)+ # dotsize=0.3
+      
+      stat_summary(fun=mean, aes(shape="average Rank"),geom="point",size=2, color="red", fill="red") +
+      scale_shape_manual("", values=c("average Rank"=24))+
+      scale_y_continuous(breaks=seq(0, max(Ranks$Rank),2))+
+      
+      theme_bw()+
+      theme(axis.text=element_text(size=15),axis.text.y = element_text(color=colsbulk),
+            axis.title=element_text(size=15,face="bold"),legend.text=element_text(size=15),legend.title=element_text(size=15))+
+      
+      
+      ggtitle(title) +#cellID_i
+      xlab("")+
+      ylab("Rank")
+  )
   p<-p + coord_flip()
+ 
   print(p)
 
 }
@@ -99,6 +102,7 @@ plotRanks <-function (filename,title="Rankings"){
 plotTotalNumberDEGs <-function (filename,title="Total DEGs Rankings"){
   TotalNumberDEGs <- read.table(filename, sep = "\t",header=T, as.is=T, row.names=1)#Allavelog2FC.txt #TotalNumberDEGs.txt
   TotalNumberDEGs$CellID<-rownames(TotalNumberDEGs)
+  
   p<-ggplot(data = TotalNumberDEGs,aes(x =  reorder(CellID,TotalNumberDEGs,FUN = max,decreasing = FALSE), y=TotalNumberDEGs)) +
 
     geom_bar(stat="identity",position=position_dodge())+#,
@@ -111,6 +115,7 @@ plotTotalNumberDEGs <-function (filename,title="Total DEGs Rankings"){
   p<-p+theme(plot.title = element_text(size = 15, face = "bold"),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.text=element_text(size=15),
              axis.title=element_text(size=15,face="bold"),legend.text=element_text(size=15),legend.title=element_text(size=15))
   p<-p + coord_flip()
+  
   print(p)
 }
 
@@ -144,6 +149,7 @@ plotProportions <-function (filename,title="Cell Proportion Rankings"){
     xlab("")+ylab("Proportion of cells")
   p<-p+theme(plot.title = element_text(size = 15, face = "bold"),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),axis.text=element_text(size=15),
              axis.title=element_text(size=15,face="bold"),legend.text=element_text(size=15),legend.title=element_text(size=15))
+ 
   print(p)
   #pie <- p + coord_polar("y", start=0)
   #print(pie)
