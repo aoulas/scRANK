@@ -1,6 +1,7 @@
 exportPattern("^[[:alpha:]]+")
 import(Seurat)
 import(SeuratDisk)
+import(SeuratObject)
 import(patchwork)
 import(multtest)
 import(ggplot2)
