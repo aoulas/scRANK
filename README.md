@@ -24,8 +24,12 @@ Seurat, dplyr, patchwork, metap, ggplot2, cowplot, enrichR, gridExtra, ggpubr, R
 ### Bioconductor packages
 KEGGREST, GO.db, rWikiPathways, ReactomeContentService4R, multtest, msigdb.
 ### GitHub packages
-SeuratDisk: remotes::install_github("mojaveazure/seurat-disk")\
-CellChat: devtools::install_github("sqjin/CellChat")
+SeuratDisk:\
+remotes::install_github("mojaveazure/seurat-disk")\
+BiocFileCache version 2.11.1 (or above):\
+devtools::install_github("Bioconductor/BiocFileCache")\
+CellChat:\
+devtools::install_github("sqjin/CellChat")
 
 ## Tutorial
 ### Downlaod test data 
