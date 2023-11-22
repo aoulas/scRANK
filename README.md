@@ -19,8 +19,11 @@ devtools::install_github("aoulas/scRANK")
 Please make sure you have installed all the dependencies. See instructions below.
 
 ## Installation of dependencies
-### CRAN packages
-Seurat, dplyr, patchwork, metap, ggplot2, cowplot, enrichR, gridExtra, ggpubr, RColorBrewer, crank, riverplot, rvest, stringr.
+### CRAN packages 
+Seurat, dplyr, patchwork, metap, ggplot2, cowplot, enrichR, gridExtra, ggpubr, RColorBrewer, crank, riverplot, rvest, stringr.\
+These will be installed automatically with scRANK with the exception of "riverplot" which is no longer available via cran and needs to be downloaded from archives using the link [here](https://cran.r-project.org/src/contrib/Archive/riverplot/riverplot_0.10.tar.gz)
+and then installed using: install.packages(path_to_file, repos = NULL, type="source")\
+
 ### Bioconductor packages
 KEGGREST, GO.db, rWikiPathways, ReactomeContentService4R, multtest, msigdb.
 ### GitHub packages
