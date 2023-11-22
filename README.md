@@ -66,7 +66,7 @@ scan<-"Cell"
 
 #Run basic analysis 
 seuratObject<-runBasicAnalysis(disease = disease,path=path ,annotate = annotate,userlabel = userlabel,
-          usercelltype = usercelltype,scenario=scenario)
+          usercelltype = usercelltype)
 
 #Define extra arguments for scRANK rankCells() function
 priorknowledgePathsKEGG<-listofoutput[[1]]
