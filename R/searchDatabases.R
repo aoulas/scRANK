@@ -84,7 +84,7 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
   xx <- as.list(GOTERM)
   
   if(scenario=="Malacards"){
-    #Decided to include all the pathways in the KEGG to increase chances of finding KEGG and MSIG pathways
+    #Decided to include all the pathways for KEGG to increase chances of finding KEGG and MSIG pathways
     KEGG<-list.files(pattern = paste(disease,"PathwaysKEGG.txt$",sep=""),)
     GOs<-list.files(pattern = paste(disease,"PathwaysGO.txt$",sep=""))
     React<-list.files(pattern = paste(disease,"PathwaysReactome.txt$",sep=""))
@@ -92,7 +92,7 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
     filenamesSD<-c(KEGG,GOs,React,Wiki)
     for(file in filenamesSD){
       if(file.size(file) == 0L){
-        print(paste(KEGG," is empty, either insert keywords in the file or search Malacards using additonal terms.",sep=""))
+        print(paste(file," is empty, either insert keywords in the file or search Malacards using additonal terms.",sep=""))
       }
     }
     
@@ -197,21 +197,75 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
   termsKEGG<-unique(termsKEGG)
   
   misig<-getMsigdb( org = c("hs"), id = c("SYM"), version = getMsigdbVersions() )
-  hallmark<-subsetCollection(misig, 'h')
-  termsMSIG<-c()
-  
-  for(KI in 1:length(keywordsMSIG)){
-    indexsMSIG<-grep(keywordsMSIG[KI], hallmark,ignore.case = T)
-    if(length(indexsMSIG)!=0){
-      for(MSIGI in 1:length(indexsMSIG)){
-        print(setName(hallmark[[indexsMSIG[MSIGI]]]))
-        MSIGPath<-setName(hallmark[[indexsMSIG[MSIGI]]])
-        MSIGPath<-gsub("HALLMARK_","",MSIGPath)
-        termsMSIG<-c(termsMSIG,MSIGPath)
+  findMSIG<-function(misigdb,collection){
+    #retrieeve the hallmarks gene sets
+    if(collection==1){
+      hallmark<-subsetCollection(misig, 'h')
+    }else{
+      hallmark<-subsetCollection(misig, 'c2','CP')
+    }
+    termsMSIG<-c()
+    
+    for(KI in 1:length(keywordsMSIG)){
+      #old approach
+      #indexsMSIG<-grep(keywordsMSIG[KI],hallmark,ignore.case = T)
+      #print(keywordsMSIG[KI])
+      tokens<-strsplit(keywordsMSIG[KI]," ")
+      counttokmatch<-0
+      for(h in 1:length(hallmark)){
+        bool<-c()
+        boolDes<-c()
+        for(toks in 1:length(tokens[[1]])){
+          termfromtoks<-gsub("[\\(\\)]", "", tokens[[1]][toks])
+          bool<-c(bool,grepl(termfromtoks,hallmark[[h]]@setName,ignore.case = T))
+          boolDes<-c(boolDes,grepl(termfromtoks,hallmark[[h]]@shortDescription,ignore.case = T))
+        }
+        #print(bool)
+        bool<-unique(bool)
+        boolDes<-unique(bool)
+        if(length(bool)==1){
+          if(bool){
+            print(keywordsMSIG[KI])
+            print(hallmark[[h]]@setName)
+            MSIGPath<-setName(hallmark[[h]])
+            MSIGPath<-gsub("HALLMARK_","",MSIGPath)
+            termsMSIG<-c(termsMSIG,MSIGPath)
+          }
+        }
+        if(length(boolDes)==1){
+          if(boolDes){
+            print(keywordsMSIG[KI])
+            print(hallmark[[h]]@setName)
+            MSIGPath<-setName(hallmark[[h]])
+            MSIGPath<-gsub("HALLMARK_","",MSIGPath)
+            termsMSIG<-c(termsMSIG,MSIGPath)
+            
+          }
+        }
       }
     }
+    return(termsMSIG)
   }
+  # 
+  #old approach
+  # if(length(indexsMSIG)!=0){
+  #     print(keywordsMSIG[KI])
+  #     for(MSIGI in 1:length(indexsMSIG)){
+  #     print(setName(hallmark[[indexsMSIG[MSIGI]]]))
+  #     print(hallmark[[indexsMSIG[MSIGI]]]@shortDescription)
+  #     MSIGPath<-setName(hallmark[[indexsMSIG[MSIGI]]])
+  #     MSIGPath<-gsub("HALLMARK_","",MSIGPath)
+  #     termsMSIG<-c(termsMSIG,MSIGPath)
+  #     }
+  #   }
+  # }
+  
+  termsMSIG<-findMSIG(misig,1)
   termsMSIG<-unique(termsMSIG)
+  # if(is.null(termsMSIG )){
+  #   termsMSIG<-findMSIG(misig,2)
+  #   termsMSIG<-unique(termsMSIG)
+  # }
   
   termsReact<-c()
   if(keywordsReact[1]!=""){
@@ -263,7 +317,7 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
     theme(
       plot.title = element_text(size=11,)
     ) +
-    ggtitle("Mapped prior knowledge") +#cellID_i
+    ggtitle("Matched prior knowledge") +#cellID_i
     xlab("")
   p<-p+theme(plot.title = element_text(size = 15, face = "bold"),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.text=element_text(size=15),
              axis.title=element_text(size=15,face="bold"),legend.text=element_text(size=15),legend.title=element_text(size=15))
