@@ -19,8 +19,14 @@ devtools::install_github("aoulas/scRANK")
 Please make sure you have installed all the dependencies. See instructions below.
 
 ## Installation of dependencies
-### CRAN packages
-Seurat, dplyr, patchwork, metap, ggplot2, cowplot, enrichR, gridExtra, ggpubr, RColorBrewer, crank, riverplot, rvest, stringr.
+### CRAN packages 
+Seurat, dplyr, patchwork, metap, ggplot2, cowplot, enrichR, gridExtra, ggpubr, RColorBrewer, crank, riverplot, rvest, stringr.\
+
+These will be installed automatically togther with scRANK.\
+With the exception of "riverplot" which is no longer available via cran and needs to be downloaded from archives using the link found [here](https://cran.r-project.org/src/contrib/Archive/riverplot/riverplot_0.10.tar.gz)
+and then installed using:\
+install.packages(path_to_file, repos = NULL, type="source")
+
 ### Bioconductor packages
 KEGGREST, GO.db, rWikiPathways, ReactomeContentService4R, multtest, msigdb.
 ### GitHub packages
@@ -66,7 +72,7 @@ scan<-"Cell"
 
 #Run basic analysis 
 seuratObject<-runBasicAnalysis(disease = disease,path=path ,annotate = annotate,userlabel = userlabel,
-          usercelltype = usercelltype,scenario=scenario)
+          usercelltype = usercelltype)
 
 #Define extra arguments for scRANK rankCells() function
 priorknowledgePathsKEGG<-listofoutput[[1]]
