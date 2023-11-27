@@ -317,7 +317,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     # loaded.dataSO.combined <- IntegrateLayers(object = loaded.dataSO.combined, method = CCAIntegration, orig.reduction = "pca", new.reduction = "integrated.cca",
     #                         verbose = FALSE)
     #loaded.dataSO.combined[["RNA"]] <- as(object = loaded.dataSO.combined[["RNA"]], Class = "Assay")
-    loaded.dataSO.combined.markers <- FindAllMarkers(loaded.dataSO.combined, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+    loaded.dataSO.combined.markers <- FindAllMarkers(loaded.dataSO.combined, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)#,test.use = "wilcox_limma"
     
     loaded.dataSO.combined.markerstop1<-loaded.dataSO.combined.markers %>%
       group_by(cluster) %>%
