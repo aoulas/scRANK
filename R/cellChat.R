@@ -154,5 +154,10 @@ runCellChat<-function(seuratObject,labelsC,cellIDs){
   colnames(foldchangeInterMat)<-c("CellID","Fold Diff. Inter.")
   #write.table(df.netDonor,"Donordf.net",quote = F,row.names = F,sep = "\t")
   write.table(foldchangeInterMat,"CellChatPac.txt",quote = F,row.names = F,sep = "\t")
+  indexsamp<-1
+  for(labelIndex in LablesUniq){
+    write.table(df.net[[indexsamp]],paste("CellChatPacTable",labelIndex,".txt",sep=""),quote = F,row.names = F,sep = "\t")
+    indexsamp<-indexsamp+1
+  }
   return(foldchangeInterMat)
 }
