@@ -87,7 +87,7 @@ priorknowledgeDRUGSMOA<-listofoutput[[6]]
 listofscRANKs<-rankCells(seuratObject,path,scan=scan,priorknowledgePathsKEGG,priorknowledgePathsGO,priorknowledgePathsMSIG,
 priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeDRUGSMOA,userlabel,usercelltype,checkdrug,scenario=scenario)
 
-#Run CellChat - note the first label is considered as the reference (control)
+#Run CellChat - note the first label is considered as the reference (e.g., control)
 foldchangeInterMat<-runCellChat(seuratObject,userlabel,usercelltype)
 
 #Peform basic plots
