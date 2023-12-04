@@ -59,16 +59,16 @@ path<-"full-path-to-where-data-was-extracted"
 disease<-"LAM"
 extractMalacards(disease = disease,files = c("name-of-html-file"),path = path)
 
-#Search databases with the terms extracted from Malacards (checks also that files generated from extractMalacards() are not empty)
-listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug)
-
-#Define extra arguments for scRANK runBasicAnalysis() function
+#Define extra arguments for scRANK functions
 annotate<-TRUE
 userlabel<-"label"
 usercelltype<-"celltype"
 checkdrug<-TRUE
 scenario<-"Malacards"
 scan<-"Cell"
+
+#Search databases with the terms extracted from Malacards (checks also that files generated from extractMalacards() are not empty)
+listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug)
 
 #Run basic analysis 
 seuratObject<-runBasicAnalysis(disease = disease,path=path ,annotate = annotate,userlabel = userlabel,
