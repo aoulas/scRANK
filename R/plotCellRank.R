@@ -58,8 +58,16 @@ plotRanks <-function (filename,title="Rankings"){
   MeanRanks<-as.data.frame(apply(Ranks, 1,mean))
   rownames(MeanRanks)<-CellIDS
   MeanRanks<-cbind(CellIDS,MeanRanks)
-  MeanRanks<-MeanRanks[order(MeanRanks$`apply(Ranks, 1, mean)`,decreasing = T),]
+  colnames(MeanRanks)<-c("CellIDS","Ranks")
+  MeanRanks<-MeanRanks[order(MeanRanks$Ranks,decreasing = T),]
   
+  #Checks if ranking is the same with Bulk and other cell types
+  indexBulk<-which(MeanRanks$CellIDS=="Bulk")
+  if(length(which(MeanRanks$Ranks[indexBulk]==MeanRanks$Ranks)) >1){
+    MeanRanks$Ranks[indexBulk]<-MeanRanks$Ranks[indexBulk]+0.01
+  }
+  
+  MeanRanks<-MeanRanks[order(MeanRanks$Ranks,decreasing = T),]
   indexBulk<-which(MeanRanks$CellIDS=="Bulk")
   
   colsbulk<-c(rep('black',length(CellIDS)))
@@ -67,9 +75,9 @@ plotRanks <-function (filename,title="Rankings"){
 
   Ranks<-Ranks %>%
     gather(Parameter, Rank)
-
+  as.data.frame(Ranks)
   Ranks<-cbind(CellIDS,Ranks)
-
+  
   #Ranks$CellIDS<-gsub("Lymph.Node.cd1c.positive.Myeloid.Dendritic.Cell","Myeloid.Dendritic.Cell",Ranks$CellIDS)
   suppressWarnings(
     p<-ggplot(data = Ranks,aes(x =  reorder(CellIDS,Rank,FUN = mean,decreasing = TRUE), y = Rank)) +#, color=grey
@@ -154,4 +162,5 @@ plotProportions <-function (filename,title="Cell Proportion Rankings"){
   #pie <- p + coord_polar("y", start=0)
   #print(pie)
 }
+
 
