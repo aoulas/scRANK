@@ -63,12 +63,16 @@ plotRanks <-function (filename,title="Rankings"){
   
   #Checks if ranking is the same with Bulk and other cell types
   indexBulk<-which(MeanRanks$CellIDS=="Bulk")
-  if(length(which(MeanRanks$Ranks[indexBulk]==MeanRanks$Ranks)) >1){
-    MeanRanks$Ranks[indexBulk]<-MeanRanks$Ranks[indexBulk]+0.01
+  indexessamevalue<-which(MeanRanks$Ranks[indexBulk]==MeanRanks$Ranks)
+  if(length(indexessamevalue) >1){
+    alphasort<-MeanRanks$CellIDS[indexessamevalue][order(MeanRanks$CellIDS[indexessamevalue],decreasing = F)]
+    indexalphasortbulk<-which(alphasort=="Bulk")
+    indexBulk<-indexessamevalue[indexalphasortbulk]
+    #MeanRanks$Ranks[indexBulk]<-MeanRanks$Ranks[indexBulk]+0.01
   }
   
-  MeanRanks<-MeanRanks[order(MeanRanks$Ranks,decreasing = T),]
-  indexBulk<-which(MeanRanks$CellIDS=="Bulk")
+  #MeanRanks<-MeanRanks[order(MeanRanks$Ranks,decreasing = T),]
+  #indexBulk<-which(MeanRanks$CellIDS=="Bulk")
   
   colsbulk<-c(rep('black',length(CellIDS)))
   colsbulk[indexBulk]<-"red"
