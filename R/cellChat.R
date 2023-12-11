@@ -112,13 +112,15 @@ runCellChat<-function(seuratObject,labelsC,cellIDs){
     cellchat <- aggregateNet(cellchat)
 
     groupSize <- as.numeric(table(cellchat@idents))
-    #par(mfrow = c(1,2), xpd=TRUE)
+    
     jpeg(file=paste(subDir,"/CELL_CHAT_COUNT",labelIndex,disease,".jpg",sep=""),
          width=1200, height=800,res=100)
+    par(mfrow = c(1,1), xpd=TRUE)
     netVisual_circle(cellchat@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = paste(labelIndex, "Number of interactions",sep=" "))
     dev.off()
     jpeg(file=paste(subDir,"/CELL_CHAT_WEIGHT",labelIndex,disease,".jpg",sep=""),
          width=1200, height=800,res=100)
+    par(mfrow = c(1,1), xpd=TRUE)
     netVisual_circle(cellchat@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = paste(labelIndex, "Interaction weights/strength",sep=" "))
     dev.off()
     
