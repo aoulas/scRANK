@@ -69,9 +69,9 @@ scan<-"Cell"
 
 
 if(scenario =="Hypothesis"){
-  keywordsWiki<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")#,"estrogen" #LAM
+  keywordsWiki<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")
   keywordsKEGG<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")
-  keywordsGO<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")#"JAK","STAT","Cytokine","Inflammation","Th17","Th1","IL-"
+  keywordsGO<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")
   keywordsMSIG<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")
   keywordsReact<-c("MTOR signalling","PI3K","MAPK","apoptosis","NF-k","TNF")
   keywordsMOA<-c("CDK inhibitor","MTOR inhibitor","MEK inhibitor")
