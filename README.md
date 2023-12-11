@@ -77,8 +77,8 @@ if(scenario =="Hypothesis"){
   keywordsMOA<-c("CDK inhibitor","MTOR inhibitor","MEK inhibitor")
 }
 
-#Search databases with the terms extracted from Malacards (checks also that files generated from extractMalacards() are not empty)\
-#or search databases using Hypothesis-driven keywords
+#Search databases with the terms extracted from Malacards (checks also that files generated from extractMalacards()
+#are not empty) or search databases using Hypothesis-driven keywords\
 if(scenario =="Hypothesis"){
   listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug,keywordsWikiUser = keywordsWiki, keywordsKEGGUser =keywordsKEGG,keywordsGOUser =keywordsGO, keywordsMSIGUser = keywordsMSIG,keywordsReactUser = keywordsReact, keywordsMOAUser = keywordsMOA)
 }else{
