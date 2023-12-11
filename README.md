@@ -67,7 +67,7 @@ checkdrug<-TRUE
 scenario<-"Malacards"
 scan<-"Cell"
 
-
+#Define Hypothesis-driven keywords
 if(scenario =="Hypothesis"){
   keywordsWiki<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")
   keywordsKEGG<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")
