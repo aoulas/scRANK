@@ -67,8 +67,23 @@ checkdrug<-TRUE
 scenario<-"Malacards"
 scan<-"Cell"
 
-#Search databases with the terms extracted from Malacards (checks also that files generated from extractMalacards() are not empty)
-listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug)
+
+if(scenario =="Hypothesis"){
+  keywordsWiki<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")#,"estrogen" #LAM
+  keywordsKEGG<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")
+  keywordsGO<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")#"JAK","STAT","Cytokine","Inflammation","Th17","Th1","IL-"
+  keywordsMSIG<-c("MTOR","PI3K","MAPK","apoptosis","NF-k","TNF")
+  keywordsReact<-c("MTOR signalling","PI3K","MAPK","apoptosis","NF-k","TNF")
+  keywordsMOA<-c("CDK inhibitor","MTOR inhibitor","MEK inhibitor")
+}
+
+#Search databases with the terms extracted from Malacards (checks also that files generated from extractMalacards() are not empty)\
+#or search databases using Hypotheis-driven keywords
+if(scenario =="Hypothesis"){
+  listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug,keywordsWikiUser = keywordsWiki, keywordsKEGGUser =keywordsKEGG,keywordsGOUser =keywordsGO, keywordsMSIGUser = keywordsMSIG,keywordsReactUser = keywordsReact, keywordsMOAUser = keywordsMOA)
+}else{
+  listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug)
+}
 
 #Run basic analysis 
 seuratObject<-runBasicAnalysis(disease = disease,path=path ,annotate = annotate,userlabel = userlabel,
