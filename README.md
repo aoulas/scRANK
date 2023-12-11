@@ -80,7 +80,8 @@ if(scenario =="Hypothesis"){
 #Search databases with the terms extracted from Malacards (checks also that files generated from extractMalacards()
 #are not empty) or search databases using Hypothesis-driven keywords
 if(scenario =="Hypothesis"){
-  listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug,keywordsWikiUser = keywordsWiki, keywordsKEGGUser =keywordsKEGG,keywordsGOUser =keywordsGO, keywordsMSIGUser = keywordsMSIG,keywordsReactUser = keywordsReact, keywordsMOAUser = keywordsMOA)
+  listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug,keywordsWikiUser = keywordsWiki,
+    keywordsKEGGUser =keywordsKEGG,keywordsGOUser =keywordsGO, keywordsMSIGUser = keywordsMSIG,keywordsReactUser = keywordsReact, keywordsMOAUser = keywordsMOA)
 }else{
   listofoutput<-searchDatabases(disease = disease,path=path,scenario=scenario,checkdrug=checkdrug)
 }
@@ -100,7 +101,7 @@ priorknowledgeDRUGSMOA<-listofoutput[[6]]
 #Perform mapping and ranking steps - you can use the output from the runBasicAnalysis()
 #directly in the rankCells() function.
 listofscRANKs<-rankCells(seuratObject,path,scan=scan,priorknowledgePathsKEGG,priorknowledgePathsGO,priorknowledgePathsMSIG,
-priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeDRUGSMOA,userlabel,usercelltype,checkdrug,scenario=scenario)
+  priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeDRUGSMOA,userlabel,usercelltype,checkdrug,scenario=scenario)
 
 #Run CellChat - note the first label is considered as the reference (e.g., control)
 foldchangeInterMat<-runCellChat(seuratObject,userlabel,usercelltype)
