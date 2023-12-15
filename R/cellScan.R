@@ -1,4 +1,4 @@
-rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowledgePathsGO,priorknowledgePathsMSIG,priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeMOA,labels,cellIDs,checkdrug,scenario){
+rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowledgePathsGO,priorknowledgePathsMSIG,priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeMOA,labels,cellIDs,checkdrug,scenario,LablesUniq=NULL){
   subDir <- "Figures"
   if (!file.exists(subDir)){
     dir.create(file.path(path, subDir))
@@ -11,8 +11,9 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
   }
   seuratObject$labels.cellIDs <- paste(as.character(seuratObject[[labels]][,1]), as.character(seuratObject[[cellIDs]][,1]), sep = "_")
   Idents(seuratObject) <- "labels.cellIDs"
-
-  LablesUniq<-unique(as.character(seuratObject[[labels]][,1]))
+  if(is.null(LablesUniq)){
+    LablesUniq<-unique(as.character(seuratObject[[labels]][,1]))
+  }
   listEnrichrSites()
   setEnrichrSite("Enrichr") # Human genes
   websiteLive <- TRUE
@@ -61,7 +62,8 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
     if(length(indexcountsCondition1) !=0 && length(indexcountsCondition2) !=0){
       if((scan=="Cell" && tablecellclounts[indexcountsCondition1,] > 3 && tablecellclounts[indexcountsCondition2,] > 3) || (scan=="Bulk")){
         seuratObject.markersCellIDs <- FindMarkers(seuratObject, ident.1 = Condition1, ident.2 = Condition2, verbose = FALSE,logfc.threshold = 0.25,min.pct = 0.1)
-
+        write.table(seuratObject.markersCellIDs,paste(subDirList,"/DEGs_",paste(LablesUniq,collapse ="_"),"_",gsub("/","",cellID),".txt",sep=""),quote = F,row.names = F,col.names = T,sep = "\t")
+        
         indexsigclCellIDs<-which(seuratObject.markersCellIDs$p_val_adj<=0.05)
         seuratObject.markersCellIDs_sig<-seuratObject.markersCellIDs[indexsigclCellIDs,]
         Up<-rownames(seuratObject.markersCellIDs_sig[which(seuratObject.markersCellIDs_sig$avg_log2FC>=0),])
