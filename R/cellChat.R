@@ -1,12 +1,19 @@
-runCellChat<-function(seuratObject,labelsC,cellIDs){
+runCellChat<-function(seuratObject,labelsC,cellIDs,LablesUniq=NULL){
   library(CellChat)
   subDir <- "Figures"
   if (!file.exists(subDir)){
     dir.create(file.path(subDir))
     print("Directory 'Figures' created")
   }
+  subDirList <- "lists_of_Info"
+  if (!file.exists(subDirList)){
+    dir.create(file.path(path, subDirList))
+    print("Directory 'lists_of_Info' created")
+  }
   options(stringsAsFactors = FALSE)
-  LablesUniq<-unique(as.character(seuratObject[[labelsC]][,1]))
+  if(is.null(LablesUniq)){
+    LablesUniq<-unique(as.character(seuratObject[[labelsC]][,1]))
+  }
   indexdf.netlist<-1
   df.net<-vector("list", 2)
 
@@ -158,7 +165,7 @@ runCellChat<-function(seuratObject,labelsC,cellIDs){
   write.table(foldchangeInterMat,"CellChatPac.txt",quote = F,row.names = F,sep = "\t")
   indexsamp<-1
   for(labelIndex in LablesUniq){
-    write.table(df.net[[indexsamp]],paste("CellChatPacTable",labelIndex,".txt",sep=""),quote = F,row.names = F,sep = "\t")
+    write.table(df.net[[indexsamp]],paste(subDirList,"/CellChatPacTable",labelIndex,".txt",sep=""),quote = F,row.names = F,sep = "\t")
     indexsamp<-indexsamp+1
   }
   return(foldchangeInterMat)
