@@ -21,7 +21,8 @@ rankCells(
   priorknowledgeMOA,
   labels,
   cellIDs,
-  checkdrug=TRUE
+  checkdrug=TRUE,
+  LablesUniq=NULL
 )
 }
 %- maybe also 'usage' for other objects documented here.
@@ -62,6 +63,9 @@ rankCells(
   \item{checkdrug}{
   \code{Define whether to use drug names (MalaCards approach=default), or dug mode of actions (MOAs) (Hypothesis-driven)}
   }
+  \item{LablesUniq}{
+  \code{Define the labels (2) to perform pairwise comparisons}
+  }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -80,6 +84,7 @@ Works with the output of the basic analysis function which is in the form of a S
 \item{labels }{A  Character String with the name of the column in the SEURAT object defining the sample labels to be used for DEG identification.}
 \item{cellIDs }{A  Character String with the name of the column in the SEURAT object defining the annotated cell IDs.}
 \item{checkdrug }{A Boolean (TRUE/FALSE) denoting whether to use drug names (default=TRUE) or alternatively MOAs (FALSE).}
+\item{LablesUniq }{A  Character vector with the names of sample labels to be used for DEG identification (default=NULL). If NULL the labels parameter will be used to define the sample classes.}  
 }
 \references{
 %% ~put references to the literature/web site here ~

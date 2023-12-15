@@ -9,7 +9,7 @@ Run CellChat for diease and control samples for each cell type in the experiment
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-runCellChat(seuratObject,labels,cellIDs)
+runCellChat(seuratObject,labels,cellIDs,LablesUniq=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +22,9 @@ runCellChat(seuratObject,labels,cellIDs)
   \item{cellIDs}{
   \code{Define the name of the SEURAT object column containing cell cluster IDs (if data is not annotated this needs to be defined, otherwise if will take the default value 'celltype')}
   }
+  \item{LablesUniq}{
+  \code{Define the labels (2) to perform pairwise comparisons}
+  }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -30,7 +33,7 @@ runCellChat(seuratObject,labels,cellIDs)
 \item{seuratObject }{A SEURAT object obtained from teh basic analysis funtion}
 \item{labels }{A  Character String with the name of the column in the SEURAT object defining the sample labels to be used for DEG identification.}
 \item{cellIDs }{A  Character String with the name of the column in the SEURAT object defining the annotated cell IDs.}
-
+\item{LablesUniq }{A  Character vector with the names of sample labels to be used for DEG identification (default=NULL). If NULL the labels parameter will be used to define the sample classes.}  
 }
 \references{
 %% ~put references to the literature/web site here ~
