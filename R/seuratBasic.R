@@ -1,8 +1,6 @@
 runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#scenario="Malacards",checkdrug=TRUE,keywordsWikiUser,keywordsKEGGUser,keywordsGOUser,keywordsMSIGUser,keywordsReactUser,keywordsMOAUser
   library(enrichR)
-  #library(ReactomeContentService4R)
-  #library(GO.db)
-  
+
   if (missing(disease)) cat("Argument disease is missing") else cat(paste("Argument disease =", disease));
   cat ("\n");
   if (missing(path)) cat("Argument path is missing") else cat(paste("Argument path =", path));
@@ -30,69 +28,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     }
   }
   
-  # if(scenario !="Hypothesis" && scenario !="Malacards"){
-  #   cat("Argument scenario can only take values 'Malacards' or 'Hypothesis'")
-  #   cat ("\n");
-  #   stop("Execution terminated")
-  # }else{
-  #   cat(paste("Argument Scenario =", scenario));
-  #   cat ("\n");
-  # }
   
-  # if(scenario=="Hypothesis"){
-  #   if (missing(keywordsWikiUser)) {
-  #     cat("If Hypothesis scenario is selected the argument keywordsWikiUser must also be provided")
-  #     cat ("\n");
-  #     stop("Execution terminated")
-  #   }else{
-  #     cat(paste("Argument keywordsWikiUser =", keywordsWikiUser));
-  #     cat ("\n");
-  #   }
-  #   if (missing(keywordsKEGGUser)){
-  #     cat("If Hypothesis scenario is selected the argument keywordsKEGGUser must also be provided")
-  #     cat ("\n");
-  #     stop("Execution terminated")
-  #   }else {
-  #     cat(paste("Argument keywordsKEGGUser =", keywordsKEGGUser));
-  #     cat("\n\n");
-  #   }
-  # 
-  #   if (missing(keywordsGOUser)){
-  #     cat("If Hypothesis scenario is selected the argument keywordsGOUser must also be provided")
-  #     cat ("\n");
-  #     stop("Execution terminated")
-  #   }else {
-  #     cat(paste("Argument keywordsGOUser =", keywordsGOUser));
-  #     cat("\n\n");
-  #   }
-  # 
-  #   if (missing(keywordsMSIGUser)){
-  #     cat("If Hypothesis scenario is selected the argument keywordsMSIGUser must also be provided")
-  #     cat ("\n");
-  #     stop("Execution terminated")
-  #   }else {
-  #     cat(paste("Argument keywordsMSIGUser =", keywordsMSIGUser));
-  #     cat("\n\n");
-  #   }
-  # 
-  #   if (missing(keywordsReactUser)){
-  #     cat("If Hypothesis scenario is selected the argument keywordsReactUser must also be provided")
-  #     cat ("\n");
-  #     stop("Execution terminated")
-  #   }else {
-  #     cat(paste("Argument keywordsReactUser =", keywordsReactUser));
-  #     cat("\n\n");
-  #   }
-  # 
-  #   if (missing(keywordsMOAUser)){
-  #     cat("If Hypothesis scenario is selected the argument keywordsMOAUser must also be provided")
-  #     cat ("\n");
-  #     stop("Execution terminated")
-  #   }else {
-  #     cat(paste("Argument keywordsMOAUser =", keywordsMOAUser));
-  #     cat("\n\n");
-  #   }
-  # }
   setwd(path)
   subDir <- "Figures"
   if (!file.exists(subDir)){
@@ -100,21 +36,8 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     print("Directory 'Figures' created")
   }
   
-  # if(checkdrug==FALSE){ 
-  #   if(!file.exists("drug_repurposing_hub.txt")){
-  #     cat("For the option of checkdrug==FALSE, you need to supply a drug repusporing database file, you can download one with the scRANK test data here: https://bioinformatics.cing.ac.cy/downloads/scRNA/LAM.tar.gz")
-  #     cat ("\n");
-  #     stop("Execution terminated")
-  #   }else{
-  #     cat(paste("Argument checkdrug =", checkdrug));
-  #     cat("\n\n");
-  #   }
-  # }
   print(paste("Starting Analysis for",disease,sep=" "))
   
-
-
-
 
   ##########################################Run analysis#############################################################################
   dirs <- list.dirs()
@@ -428,166 +351,6 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){#s
     dev.off()
   }
 
-  # xx <- as.list(GOTERM)
-  # 
-  # if(scenario=="Malacards"){
-  #   #Decided to include all the pathways in the KEGG to increase chances of finding KEGG and MSIG pathways
-  #   KEGG<-list.files(pattern = paste(disease,"PathwaysKEGG.txt",sep=""))
-  #   GOs<-list.files(pattern = paste(disease,"PathwaysGO.txt",sep=""))
-  #   React<-list.files(pattern = paste(disease,"PathwaysReactome.txt",sep=""))
-  #   Wiki<-list.files(pattern = paste(disease,"PathwaysWiki.txt",sep=""))
-  # 
-  #   file.size(Wiki) == 0L
-  #   keywordsWiki<-read.table(Wiki, header=F, sep="\t")
-  #   keywordsWiki<-as.array(keywordsWiki[,1])
-  #   keywordsOther<-read.table(KEGG, header=F, sep="\t")
-  #   keywordsOther<-as.array(keywordsOther[,1])
-  #   keywordsGO<-read.table(GOs, header=F, sep="\t")
-  #   keywordsGO<-as.array(keywordsGO[,1])
-  #   keywordsMSIG<-keywordsOther
-  #   keywordsKEGG<-keywordsOther
-  #   termsWiki<-keywordsWiki
-  #   termsWiki<-unique(tolower(termsWiki))
-  #   keywordsReact<-c("")
-  #   tryCatch(
-  #     #try to do this
-  #     {
-  #       keywordsReact<-read.table(React, header=F, sep="\t")
-  #       keywordsReact<-as.array(keywordsReact[,1])
-  #     },
-  #     #if an error occurs, print the error
-  #     error=function(e) {
-  #       message('An Error Occurred... empty file')
-  #       print(e)
-  #     },
-  #     #if a warning occurs, print the warning
-  #     warning=function(w) {
-  #       message('A Warning Occurred')
-  #       print(w)
-  #       return(NA)
-  #     }
-  #   )
-  # 
-  # }else{
-  #   keywordsWiki<-keywordsWikiUser
-  #   keywordsKEGG<-keywordsKEGGUser
-  #   keywordsGO<-keywordsGOUser
-  #   keywordsMSIG<-keywordsMSIGUser
-  #   keywordsReact<-keywordsReactUser
-  # 
-  #   termsWiki<-c()
-  #   indexWiki<-1
-  #   for(WI in keywordsWiki){
-  #     print(WI)
-  #     termsWikiFirstSearch<-findPathwayNamesByText(WI)
-  # 
-  #     if(indexWiki !=1){
-  #       foundinsearch<-grepl(WI, termsWikiFirstSearch,ignore.case = T)#not sure here double check changed from previous runs
-  #       termsWiki<-c(termsWiki,termsWikiFirstSearch[foundinsearch])
-  #     }else{
-  #       termsWiki<-c(termsWiki,termsWikiFirstSearch)
-  #     }
-  #     indexWiki<-indexWiki+1
-  #   }
-  #   termsWiki<-termsWiki[!is.na(termsWiki)]
-  #   termsWiki<-unique(tolower(termsWiki))
-  # }
-  # 
-  # 
-  # if(scenario=="Hypothesis"){
-  #   termsGO<-c()
-  #   for(KI in 1:length(keywordsGO)){
-  #     indexsGO<-grep(keywordsGO[KI], xx,ignore.case = T)
-  #     if(length(indexsGO)!=0){
-  #       for(GOI in 1:length(indexsGO)){
-  #         print(Term(xx[[indexsGO[GOI]]]))
-  #         print(Ontology(xx[[indexsGO[GOI]]]))
-  #         print(GOID(xx[[indexsGO[GOI]]]))
-  #         if(Ontology(xx[[indexsGO[GOI]]])=="BP"){
-  #           termsGO<-c(termsGO,Term(xx[[indexsGO[GOI]]]))
-  #         }
-  #       }
-  #     }
-  #   }
-  #   termsGO<-unique(termsGO)
-  # }else{
-  #   termsGO<-keywordsGO
-  # }
-  # termsKEGG<-c()
-  # for(KI in 1:length(keywordsKEGG)){
-  #   tryCatch(
-  #     #try to do this
-  #     {
-  #       termsKEGG<-c(termsKEGG,as.character(keggFind("pathway", c(keywordsKEGG[KI])))[1])
-  #       termsKEGG<-c(termsKEGG,as.character(keggFind("disease", c(keywordsKEGG[KI])))[1])
-  #     },
-  #     #if an error occurs, print the error
-  #     error=function(e) {
-  #       message('An Error Occurred... term was not found in KEGG')
-  #       print(e)
-  #     },
-  #     #if a warning occurs, print the warning
-  #     warning=function(w) {
-  #       message('A Warning Occurred')
-  #       print(w)
-  #       return(NA)
-  #     }
-  #   )
-  # }
-  # 
-  # termsKEGG<-termsKEGG[!is.na(termsKEGG)]
-  # termsKEGG<-unique(termsKEGG)
-  # 
-  # misig<-getMsigdb( org = c("hs"), id = c("SYM"), version = getMsigdbVersions() )
-  # hallmark<-subsetCollection(misig, 'h')
-  # termsMSIG<-c()
-  # 
-  # for(KI in 1:length(keywordsMSIG)){
-  #   indexsMSIG<-grep(keywordsMSIG[KI], hallmark,ignore.case = T)
-  #   if(length(indexsMSIG)!=0){
-  #     for(MSIGI in 1:length(indexsMSIG)){
-  #       print(setName(hallmark[[indexsMSIG[MSIGI]]]))
-  #       MSIGPath<-setName(hallmark[[indexsMSIG[MSIGI]]])
-  #       MSIGPath<-gsub("HALLMARK_","",MSIGPath)
-  #       termsMSIG<-c(termsMSIG,MSIGPath)
-  #     }
-  #   }
-  # }
-  # termsMSIG<-unique(termsMSIG)
-  # 
-  # termsReact<-c()
-  # if(keywordsReact[1]!=""){
-  #   for(KI in 1:length(keywordsReact)){
-  #     bdd.search <- searchQuery(query = keywordsReact[KI], species = "human",types = "Pathway")
-  #     bdd.search$results$entries[[1]]$name[1]
-  #     id<-query(id = paste("R-HSA-",bdd.search$results$entries[[1]]$dbId[1],sep=""))
-  #     print(id$displayName)
-  #     termsReact<-c(termsReact,id$displayName)
-  #   }
-  # }
-  # 
-  # if(checkdrug==TRUE){
-  #   Drugs<-list.files(pattern = paste(disease,"DrugsSorted.txt",sep=""))
-  #   keywordsMOA<-read.table(Drugs, header=F, sep="\t")
-  #   keywordsMOA<-as.array(keywordsMOA[,1])
-  #   termsMOA<-keywordsMOA
-  # }else{
-  #   drugInfo<-read.delim("drug_repurposing_hub.txt")
-  #   keywordsMOA<-keywordsMOAUser
-  # 
-  #   termsMOA<-c()
-  #   for(KI in 1:length(keywordsMOA)){
-  #     indexsMOA<-grep(keywordsMOA[KI], drugInfo$moa,ignore.case = T)
-  #     if(length(indexsMOA)!=0){
-  #       for(MMOA in indexsMOA){
-  #         if(grepl(keywordsMOA[KI], drugInfo$moa[MMOA],ignore.case = T)){
-  #           termsMOA<-c(termsMOA,drugInfo$moa[MMOA])
-  #         }
-  #       }
-  #     }
-  #   }
-  #   termsMOA<-unique(termsMOA)
-  # }
 
   # What proportion of cells are in each cluster?
   jpeg(file=paste(subDir,"/ALL_CELLS_PROP_",disease,".jpg",sep=""),

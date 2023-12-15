@@ -1,15 +1,3 @@
-# library(ggplot2)
-# library(ggpubr)
-# library(gridExtra)
-#
-# library(reshape2)
-# library(tidyr)
-# library(tidyverse)
-# library(dbplyr)
-#filename<-"/data/oulas/scRNA-Seq/autism/RanksMalacardsPlusWikiReactFinalPac.txt"
-#title<-"Rankings proportions"
-#plotRanks(filename)
-
 plotCellChat <-function (filename,title="CellChat Rankings"){
 
     CellChat <- read.table(filename, sep = "\t",header=T, as.is=T, row.names=1)
@@ -19,8 +7,6 @@ plotCellChat <-function (filename,title="CellChat Rankings"){
     colsbulk[indexBulk]<-"red"
     CellChat <- CellChat[order(CellChat$Fold.Diff..Inter.),]
 
-
-    #CellChat$CellID<-gsub("Lymph.Node.cd1c.positive.Myeloid.Dendritic.Cell","Myeloid.Dendritic.Cell",CellChat$CellID)
     suppressWarnings(
     p<-ggplot(data = CellChat,aes(x =  reorder(CellID,Fold.Diff..Inter.,FUN = max,decreasing = TRUE), y=Fold.Diff..Inter.)) +
 
@@ -82,7 +68,6 @@ plotRanks <-function (filename,title="Rankings"){
   as.data.frame(Ranks)
   Ranks<-cbind(CellIDS,Ranks)
   
-  #Ranks$CellIDS<-gsub("Lymph.Node.cd1c.positive.Myeloid.Dendritic.Cell","Myeloid.Dendritic.Cell",Ranks$CellIDS)
   suppressWarnings(
     p<-ggplot(data = Ranks,aes(x =  reorder(CellIDS,Rank,FUN = mean,decreasing = TRUE), y = Rank)) +#, color=grey
       geom_boxplot(outlier.colour = NA,color=colsbulk) +
@@ -134,7 +119,7 @@ plotTotalNumberDEGs <-function (filename,title="Total DEGs Rankings"){
 plotProportions <-function (filename,title="Cell Proportion Rankings"){
   proportions <- read.table(filename, sep = "\t",header=T, as.is=T, row.names=1)#Allavelog2FC.txt
   colnames(proportions)<-c("CellIDs","Condition","Proportion")
-
+  
   proportions2<-proportions%>%
     arrange(CellIDs) %>%
     group_by(CellIDs) %>%
@@ -163,8 +148,6 @@ plotProportions <-function (filename,title="Cell Proportion Rankings"){
              axis.title=element_text(size=15,face="bold"),legend.text=element_text(size=15),legend.title=element_text(size=15))
  
   print(p)
-  #pie <- p + coord_polar("y", start=0)
-  #print(pie)
 }
 
 
