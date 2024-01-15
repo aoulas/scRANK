@@ -366,6 +366,5 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
   
   write.table(proportions,"proportionsFinalPac.txt",quote = F,row.names = T,sep = "\t")
   
-  #listofoutput<-list(loaded.dataSO.combined,termsKEGG,termsGO,termsMSIG,termsWiki,termsReact,termsMOA)
   return(loaded.dataSO.combined)
 }
