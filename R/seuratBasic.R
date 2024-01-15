@@ -172,6 +172,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
     }
   }
   
+  plot.list = plot.list[-which(sapply(plot.list, is.null))]
   #increase memory size to hold larger objects
   options(future.globals.maxSize = 8000 * 1024^2)
   if(index==2){
