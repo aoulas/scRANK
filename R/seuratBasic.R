@@ -72,6 +72,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
       print(project_name)
       # Initialize the Seurat object with the raw (non-normalized data).
       if(foundmeta){
+        print("Found meta.txt loading metadata from file")
         meta <- read.table(paste(project_name,"/meta.txt",sep = ""), header=T, sep="\t", as.is=T, row.names=1)
         loaded.dataSO <- CreateSeuratObject(counts = loaded.data, project = project_name, min.cells = 3, min.features = 200,meta.data=meta)
       }else{
@@ -225,7 +226,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
   
   if(annotate==FALSE){
     jpeg(file=paste(subDir,"/UMAP_ANNOT2_",disease,".jpg",sep=""),
-         width=1000, height=800,res=100)
+         width=2000, height=800,res=100)
     plot(DimPlot(loaded.dataSO.combined, reduction = "umap", split.by = userlabel,group.by = usercelltype,raster=FALSE))
     dev.off()
   }
@@ -324,7 +325,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
     loaded.dataSO.combined$celltype <- Idents(loaded.dataSO.combined)
     
     jpeg(file=paste(subDir,"/UMAP_ANNOT3_SPLIT_",disease,".jpg",sep=""),
-         width=1000, height=800,res=100)  
+         width=2000, height=800,res=100)  
     plot(DimPlot(loaded.dataSO.combined, reduction = "umap", split.by = "label",label = TRUE))
     dev.off()
     
