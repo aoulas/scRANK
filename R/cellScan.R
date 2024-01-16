@@ -14,6 +14,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
   if(is.null(LablesUniq)){
     LablesUniq<-unique(as.character(seuratObject[[labels]][,1]))
   }
+  #print(LablesUniq)
   listEnrichrSites()
   setEnrichrSite("Enrichr") # Human genes
   websiteLive <- TRUE
