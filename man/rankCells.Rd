@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 %%  ~~function to do ... ~~
-Rank all cells in the anlaysis by mapping to prior knowledge
+Rank all cells in the analysis by mapping to prior knowledge
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -31,28 +31,28 @@ rankCells(
   \code{The SEURAT object to analyse}
   }
   \item{path}{
-  \code{Full path to where the data data was extracted}
+  \code{Full path to where the data was extracted}
   }
   \item{scan}{
-  \code{Define whether to scan single-cell or simulate bulk RNA (takes two values defualt="Cell" or "Bulk")}
+  \code{Define whether to scan single-cell or simulate bulk RNA (takes two values default="Cell" or "Bulk")}
   }
   \item{priorknowledgePathsKEGG}{
-  \code{Define the prior knowdledge from KEGG pathways}
+  \code{Define the prior knowledge from KEGG pathways}
   }
   \item{priorknowledgePathsGO}{
-  \code{Define the prior knowdledge from GO Biological processes}
+  \code{Define the prior knowledge from GO Biological processes}
   }
   \item{priorknowledgePathsMSIG}{
-  \code{Define the prior knowdledge from MSIG pathways}
+  \code{Define the prior knowledge from MSIG pathways}
   }
   \item{priorknowledgePathsWiki}{
-  \code{Define the prior knowdledge from WIKI pathways}
+  \code{Define the prior knowledge from WIKI pathways}
   }
   \item{priorknowledgePathsReact}{
-  \code{Define the prior knowdledge from REACTOME pathways}
+  \code{Define the prior knowledge from REACTOME pathways}
   }
   \item{priorknowledgeMOA}{
-  \code{Define the prior knowdledge drugs or drug MOAs from CMAP}
+  \code{Define the prior knowledge drugs or drug MOAs from CMAP}
   }
   \item{labels}{
   \code{Define the name of the SEURAT object column containing disease-control labels (if data is not annotated this needs to be defined, otherwise if will take the default value 'label')}
@@ -64,16 +64,16 @@ rankCells(
   \code{Define whether to use drug names (MalaCards approach=default), or dug mode of actions (MOAs) (Hypothesis-driven)}
   }
   \item{LablesUniq}{
-  \code{Define the labels (N=2) to perform pairwise comparisons. The second label will considered as the reference}
+  \code{Define the labels (N=2) to perform pairwise comparisons. The second label will be considered as the reference}
   }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
-Works with the output of the basic analysis function which is in the form of a SEURAT object. Sample labels have to be supplied in order to perform the analysis for differentially expressed genes (DEGs) identification. Genes are used to predict pathways using five different databases supported by enrichR (KEGG, GO, REACTOME, MSIG and WIKI). Drug repurposing is also performed in order to obtain the drugs (and their MOAs) that reverse the expression profiles obtained by the DEGs. Finally this function performs a mapping step and returns the rankings per cell-type across pathwways and drugs.
+Works with the output of the basic analysis function which is in the form of a SEURAT object. Sample labels have to be supplied in order to perform the analysis for differentially expressed genes (DEGs) identification. Genes are used to predict pathways using five different databases supported by enrichR (KEGG, GO, REACTOME, MSIG and WIKI). Drug repurposing is also performed in order to obtain the drugs (and their MOAs) that reverse the expression profiles obtained by the DEGs. Finally, this function performs a mapping step and returns the rankings per cell-type across pathways and drugs.
 }
 \value{
 %%  ~Describe the value returned
-\item{seuratObject }{A SEURAT object obtained from the basic analysis funtion}
+\item{seuratObject }{A SEURAT object obtained from the basic analysis function}
 \item{scan }{A Character string the type of analysis to perform (Cell of Bulk).}
 \item{priorknowledgePathsKEGG }{A  Character vector with the prior knowledge information from KEGG.}
 \item{priorknowledgePathsGO }{A  Character vector with the prior knowledge information from GO .}
