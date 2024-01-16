@@ -27,7 +27,7 @@ runBasicAnalysis(
   \code{The path to the directory containing the data}
   }
   \item{annotate}{
-  \code{Define whether the data is annotated or if annoation is required (default=TRUE). If FALSE then annotation will be performed automatically using the 100 most significant marker genes for each cell type across three marker gene databases ("PanglaoDB_Augmented_2021","CellMarker_Augmented_2021","Tabula_Sapiens").}
+  \code{Define whether the data is annotated or if annotation is required (default=TRUE). If FALSE then annotation will be performed automatically using the 100 most significant marker genes for each cell type across three marker gene databases ("PanglaoDB_Augmented_2021","CellMarker_Augmented_2021","Tabula_Sapiens").}
   }
   \item{userlabel}{
   \code{Define the name of the SEURAT object column containing disease-control labels (if data is not annotated this needs to be defined, otherwise if will take the default value 'label')}
@@ -38,7 +38,7 @@ runBasicAnalysis(
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
-The path paremter should point to a directory containing either of the following: 1) The data supplied in seperate subdirectories for all the samples in the analysis. The names given to the sample subdirectories will be used later for labeling the samples and therefore have to be structured correctly in the form of: unique label followed by a number (e.g., Disease1, Disease2, Disease3, Control1, Control2, Control3). 2) The data in an already inetgrated format in a single subdirectory within the directory provided by the path parameter.
+The path parameter should point to a directory containing either of the following: 1) The data supplied in separate subdirectories for all the samples in the analysis. The names given to the sample subdirectories will be used later for labelling the samples and therefore have to be structured correctly in the form of: unique label followed by a number (e.g., Disease1, Disease2, Disease3, Control1, Control2, Control3). 2) The data in an already integrated format in a single subdirectory within the directory provided by the path parameter.
 
 Data can be provided in any of the following supported formats:
 1) barcodes.tsv, genes.tsv, matrix.mtx, 2) H5 format, 3) SEURAT objects. If a metadata file exists with further annontations it may be supplied in the individual subdirectory/ies as a file with the name "meta.txt".
