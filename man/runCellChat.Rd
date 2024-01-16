@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 %%  ~~function to do ... ~~
-Run CellChat for diease and control samples for each cell type in the experiment
+Run CellChat for two conditions (e.g., disease vs. control) samples for each cell type in the experiment
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -30,10 +30,10 @@ runCellChat(seuratObject,labels,cellIDs,LablesUniq=NULL)
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-\item{seuratObject }{A SEURAT object obtained from teh basic analysis funtion}
-\item{labels }{A  Character String with the name of the column in the SEURAT object defining the sample labels to be used for DEG identification.}
+\item{seuratObject }{A SEURAT object obtained from the basic analysis function}
+\item{labels }{A  Character String with the name of the column in the SEURAT object defining the sample labels to be used for network differentiation.}
 \item{cellIDs }{A  Character String with the name of the column in the SEURAT object defining the annotated cell IDs.}
-\item{LablesUniq }{A  Character vector with the names of sample labels to be used for network construction (default=NULL). If NULL the labels parameter will be used to define the sample classes.}  
+\item{LablesUniq }{A  Character vector with the names of sample labels to be used for network differentiation (default=NULL). If NULL the labels parameter will be used to define the sample classes.}  
 }
 \references{
 %% ~put references to the literature/web site here ~
