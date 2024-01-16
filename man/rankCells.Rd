@@ -64,7 +64,7 @@ rankCells(
   \code{Define whether to use drug names (MalaCards approach=default), or dug mode of actions (MOAs) (Hypothesis-driven)}
   }
   \item{LablesUniq}{
-  \code{Define the labels (2) to perform pairwise comparisons}
+  \code{Define the labels (N=2) to perform pairwise comparisons. The second label will considered as the reference}
   }
 }
 \details{
