@@ -21,7 +21,7 @@ extractMalacards(disease,files,path)
   \code{A MalaCards html file name to parse}
   }
   \item{path}{
-  \code{Path where html files are stored and by defult will be used to also write output files}
+  \code{Path where html files are stored and by default will be used to also write output files}
   }
 }
 \details{
@@ -32,7 +32,7 @@ extractMalacards(disease,files,path)
 %%  If it is a LIST, use
 \item{disease }{A Character string with the name of disease}
 \item{files }{A vector containing characters strings of file name(s) of downloaded html disease page(s) from MalaCards}
-\item{path }{A character strings with the path to the directory where html files are stored. By defult the same path will also be used to write output files}
+\item{path }{A character strings with the path to the directory where html files are stored. By default the same path will also be used to write output files}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
