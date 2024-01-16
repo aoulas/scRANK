@@ -101,8 +101,10 @@ priorknowledgeDRUGSMOA<-listofoutput[[6]]
 
 #Perform mapping and ranking steps - you can use the output from the runBasicAnalysis()
 #directly in the rankCells() function.
+#Set the LabelsUniq parameter so that the second label is the reference
+LablesUniq<-unique(as.character(seuratObject[[userlabel]][,1]))[c(2,1)]
 listofscRANKs<-rankCells(seuratObject,path,scan=scan,priorknowledgePathsKEGG,priorknowledgePathsGO,priorknowledgePathsMSIG,
-  priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeDRUGSMOA,userlabel,usercelltype,checkdrug,scenario=scenario)
+  priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeDRUGSMOA,userlabel,usercelltype,checkdrug,scenario=scenario,LablesUniq)
 
 #Run CellChat - note the first label is considered as the reference (e.g., control)
 foldchangeInterMat<-runCellChat(seuratObject,userlabel,usercelltype)
