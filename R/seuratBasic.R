@@ -1,4 +1,4 @@
-runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
+runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype,marker_DB=3){
   library(enrichR)
   
   if (missing(disease)) cat("Argument disease is missing") else cat(paste("Argument disease =", disease));
@@ -28,6 +28,12 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
     }
   }
   
+  if(!marker_DB %in% c(1,2,3)){
+    cat("marker_DB can only take values 1,2 or 3")
+    cat ("\n");
+    stop("Execution terminated")
+  }
+  
   
   setwd(path)
   subDir <- "Figures"
@@ -54,18 +60,21 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
     dirs<-dirs[-indexhtmlfiles]
   }
   #start from 2 to avoid home directory
-  #options(Seurat.object.assay.version = "v3")
+  foundcorrformatfiles<-FALSE
   for(i in 2:length(dirs)){
     data_dir<-dirs[i]
     
     filesindir<-list.files(data_dir)
     #check if dir contains seurat raw data using different formats (rds, H5, ect)
     foundfalse<-which(c("barcodes.tsv","genes.tsv","matrix.mtx") %in% filesindir==FALSE)
-    
+    foundfalsefeat<-which(c("barcodes.tsv","features.tsv","matrix.mtx") %in% filesindir==FALSE)
+    foundfalsegz<-which(c("barcodes.tsv.gz","genes.tsv.gz","matrix.mtx.gz") %in% filesindir==FALSE)
+    foundfalsegzfeat<-which(c("barcodes.tsv.gz","features.tsv.gz","matrix.mtx.gz") %in% filesindir==FALSE)
     foundH5<-grep("\\.h5",filesindir)
     foundrds<-grep("\\.rds",filesindir)
     foundmeta<-"meta.txt"%in% filesindir
-    if(length(foundfalse)==0){
+    if(length(foundfalse)==0 || length(foundfalsegz)==0 || length(foundfalsefeat)==0 || length(foundfalsegzfeat)==0){
+      foundcorrformatfiles<-TRUE
       # Load the dataset
       loaded.data <- Read10X(data.dir = data_dir)
       project_name<-gsub("[\\.\\/]","",data_dir,)
@@ -102,6 +111,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
       
       loaded.dataSO.list<-c(loaded.dataSO.list,loaded.dataSO)
     }else if(length(foundH5) !=0){
+      foundcorrformatfiles<-TRUE
       loaded.data <- Read10X_h5(paste(data_dir,"/",filesindir,sep=""), use.names = TRUE, unique.features = TRUE)
       project_name<-gsub("[\\.\\/]","",data_dir,)
       print(project_name)
@@ -135,7 +145,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
       loaded.dataSO <- FindVariableFeatures(loaded.dataSO, selection.method = "vst", nfeatures = 2000)
       loaded.dataSO.list<-c(loaded.dataSO.list,loaded.dataSO)
     }else if(length(foundrds) !=0){
-      
+      foundcorrformatfiles<-TRUE
       loaded.dataSO<- readRDS(paste(data_dir,"/",filesindir[foundrds],sep=""))
       project_name<-gsub("[\\.\\/]","",data_dir,)
       print(project_name)
@@ -172,7 +182,10 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
       loaded.dataSO.list<-c(loaded.dataSO.list,loaded.dataSO)
     }
   }
-  
+  if(foundcorrformatfiles==FALSE){
+    print("No files of corret format found")
+    stop()
+  }
   plot.list = plot.list[-which(sapply(plot.list, is.null))]
   #increase memory size to hold larger objects
   options(future.globals.maxSize = 8000 * 1024^2)
@@ -301,7 +314,7 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype){
       }
       celltype<-c(enriched[[1]]$Term[1],enriched[[2]]$Term[1],enriched[[3]]$Term[1])
       print(paste("Cluster",m,celltype,sep = " "))
-      annotatedclusters<-c(annotatedclusters,toString(celltype[3]))#changed to Tabula Sapiens changed to Panglao for MM
+      annotatedclusters<-c(annotatedclusters,toString(celltype[marker_DB]))#changed to Tabula Sapiens changed to Panglao for MM
       names(enriched)<-paste(names(enriched),m,sep = "_")
       listofresults<-c(listofresults,enriched)
       
