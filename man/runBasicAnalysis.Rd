@@ -45,7 +45,7 @@ runBasicAnalysis(
 The path parameter should point to a directory containing either of the following: 1) The data supplied in separate subdirectories for all the samples in the analysis. The names given to the sample subdirectories will be used later for labelling the samples and therefore have to be structured correctly in the form of: unique label followed by a number (e.g., Disease1, Disease2, Disease3, Control1, Control2, Control3). 2) The data in an already integrated format in a single subdirectory within the directory provided by the path parameter.
 
 Data can be provided in any of the following supported formats:
-1) barcodes.tsv, genes.tsv or features.tsv, matrix.mtx, 2) H5 format, 3) SEURAT objects. If a metadata file exists with further annontations it may be supplied in the individual subdirectory/ies as a file with the name "meta.txt".
+1) barcodes.tsv, genes.tsv/features.tsv, matrix.mtx, 2) H5 format, 3) SEURAT objects. If a metadata file exists with further annontations it may be supplied in the individual subdirectory/ies as a file with the name "meta.txt".
 
 }
 \value{
@@ -56,7 +56,7 @@ Data can be provided in any of the following supported formats:
 \item{annotate }{A Boolean (TRUE/FALSE) denoting whether to annotate the data (default=TRUE).}
 \item{userlabel }{A  Character string with the name of the SEURAT object column which contains the information labels with respect to the conditions of the experiment (disease-control labels).}
 \item{usercelltype }{A  Character string with the name of the SEURAT object column which contains the annotated cell cluster IDs.}
-\item{marker_DB }{An integer (1 = Panglao, 2 = CellMarker, 3 = Tabula Sapiens (default)) which defines the marker database to use when annotating the cell cluster.}
+\item{marker_DB }{An integer (1 = Panglao, 2 = CellMarker, 3 = Tabula Sapiens (default)) which defines the marker database to use when annotating the cell clusters.}
 %% ...
 }
 \references{
