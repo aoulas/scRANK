@@ -325,7 +325,8 @@ runBasicAnalysis<-function(disease,path,annotate=TRUE,userlabel,usercelltype,mar
     }
     
     #Rename indents
-    new.cluster.ids <- make.names(annotatedclusters,unique = T)
+    #new.cluster.ids <- make.names(annotatedclusters,unique = T)
+    new.cluster.ids <- annotatedclusters
     names(new.cluster.ids) <- levels(loaded.dataSO.combined)
     loaded.dataSO.combined <- RenameIdents(loaded.dataSO.combined, new.cluster.ids)
     jpeg(file=paste(subDir,"/UMAP_ANNOT3_",disease,".jpg",sep=""),
