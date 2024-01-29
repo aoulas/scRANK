@@ -63,7 +63,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
     if(length(indexcountsCondition1) !=0 && length(indexcountsCondition2) !=0){
       if((scan=="Cell" && tablecellclounts[indexcountsCondition1,] > 3 && tablecellclounts[indexcountsCondition2,] > 3) || (scan=="Bulk")){
         seuratObject.markersCellIDs <- FindMarkers(seuratObject, ident.1 = Condition1, ident.2 = Condition2, verbose = FALSE,logfc.threshold = 0.25,min.pct = 0.1)
-        write.table(seuratObject.markersCellIDs,paste(subDirList,"/DEGs_",paste(LablesUniq,collapse ="_"),"_",gsub("/","",cellID),".txt",sep=""),quote = F,row.names = F,col.names = T,sep = "\t")
+        write.table(seuratObject.markersCellIDs,paste(subDirList,"/DEGs_",paste(LablesUniq,collapse ="_"),"_",gsub("/","",make.names(cellID)),".txt",sep=""),quote = F,row.names = T,col.names = T,sep = "\t")
         
         indexsigclCellIDs<-which(seuratObject.markersCellIDs$p_val_adj<=0.05)
         seuratObject.markersCellIDs_sig<-seuratObject.markersCellIDs[indexsigclCellIDs,]
@@ -103,7 +103,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             enrichedPaths <- enrichr(c(Up,Down), dbstousePaths)#
           }
           if(scan=="Cell"){
-            jpeg(file=paste(subDir,"/PATHWAYS_",gsub("/","",cellID),"_",disease,".jpg",sep=""),
+            jpeg(file=paste(subDir,"/PATHWAYS_",gsub("/","",make.names(cellID)),"_",disease,".jpg",sep=""),
                  width=1200, height=800)
             if (websiteLive) plot(plotEnrich(enrichedPaths[["KEGG_2021_Human"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("KEGG",cellID,sep=" "))+plotEnrich(enrichedPaths[["GO_Biological_Process_2021"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("GO_Bio_Pro",cellID))+plotEnrich(enrichedPaths[["MSigDB_Hallmark_2020"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("MSigDB",cellID))+plotEnrich(enrichedPaths[["WikiPathway_2021_Human"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("WIKI",cellID))+plotEnrich(enrichedPaths[["Reactome_2022"]], showTerms = 40,numChar = 40, y = "Count", orderBy = "P.value",title = paste("Reactome",cellID)))
             dev.off()
@@ -381,17 +381,17 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
 
           if(scan=="Cell"){
             if(nrow(enrichedUp[["Old_CMAP_down"]]) != 0 && nrow(enrichedDown[["Old_CMAP_up"]]) != 0){
-              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",cellID),"_",disease,".jpg",sep=""),
+              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",make.names(cellID)),"_",disease,".jpg",sep=""),
                    width=1200, height=800)
               if (websiteLive) plot(plotEnrich(enrichedUp[["Old_CMAP_down"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "UP",sep=" "))+plotEnrich(enrichedDown[["Old_CMAP_up"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "Down",sep=" ")))
               dev.off()
             }else if(nrow(enrichedUp[["Old_CMAP_down"]]) != 0 && nrow(enrichedDown[["Old_CMAP_up"]]) == 0){
-              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",cellID),"_",disease,".jpg",sep=""),
+              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",make.names(cellID)),"_",disease,".jpg",sep=""),
                    width=1200, height=800)
               if (websiteLive) plot(plotEnrich(enrichedUp[["Old_CMAP_down"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "UP",sep=" ")))
               dev.off()
             }else if(nrow(enrichedUp[["Old_CMAP_down"]]) == 0 && nrow(enrichedDown[["Old_CMAP_up"]]) != 0){
-              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",cellID),"_",disease,".jpg",sep=""),
+              jpeg(file=paste(subDir,"/DRUGS_",gsub("/","",make.names(cellID)),"_",disease,".jpg",sep=""),
                    width=1200, height=800)
               if (websiteLive) plotEnrich(enrichedDown[["Old_CMAP_up"]], showTerms = 40, numChar = 40, y = "Count", orderBy = "P.value",title = paste("CMAP", cellID, "Down",sep=" "))
               dev.off()
@@ -472,7 +472,7 @@ rankCells<-function (seuratObject,path,scan,priorknowledgePathsKEGG,priorknowled
             #Checks drugs directly
             matchMOAIndexesOrdered<-match(tolower(priorknowledgeMOA),tolower(iconv(as.character(AlldrugsCellIDs),"ISO-8859-1")))
           }
-          write.table(AlldrugsCellIDs,paste(subDirList,"/Drugs_",gsub("/","",cellID),".txt",sep=""),quote = F,row.names = F,col.names = F)
+          write.table(AlldrugsCellIDs,paste(subDirList,"/Drugs_",gsub("/","",make.names(cellID)),".txt",sep=""),quote = F,row.names = F,col.names = F)
           AlldrugsCellIDs[matchMOAIndexesOrdered[!isNA(matchMOAIndexesOrdered)]]
           sumoffreq<-0
           if(checkdrug==FALSE){
