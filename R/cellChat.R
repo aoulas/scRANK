@@ -7,7 +7,7 @@ runCellChat<-function(seuratObject,labelsC,cellIDs,LablesUniq=NULL){
   }
   subDirList <- "lists_of_Info"
   if (!file.exists(subDirList)){
-    dir.create(file.path(path, subDirList))
+    dir.create(file.path(subDirList))
     print("Directory 'lists_of_Info' created")
   }
   options(stringsAsFactors = FALSE)
