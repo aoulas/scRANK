@@ -41,7 +41,7 @@ devtools::install_github("sqjin/CellChat")
 ### Downlaod test data 
 A test datsets from lymphangioleiomyomatosis (LAM) disease and control (Donor) samples is available for download [here](https://bioinformatics.cing.ac.cy/downloads/scRNA/LAM.tar.gz). Extract data in a local directory.
 
-### Extract prior knowledge from MalaCards database
+### Extract prior knowledge from MalaCards database *IMPORTANT NOTE! - THE MALACARDS DATABASE STRUCTURE HAS CHANGED, SO ONLY THE HYPOTHESIS DRIVEN APPROACH (SEE TUTORIAL) IS CURRENLTY SUPPORTED BY SCRANK.
 Paste the following link in your borwser.
 ```
 https://www.malacards.org/card/lymphangioleiomyomatosis?showAll=TRUE
