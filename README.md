@@ -46,7 +46,7 @@ Paste the following link in your borwser.
 ```
 https://www.malacards.org/card/lymphangioleiomyomatosis
 ```
-For a different disease you can change the name of the disease in the url above. Make sure the disease exists with the same name in the database. Once the page has you will need to manualy downlaoid 4 tables (Drugs for Lymphangioleiomyomatosis, Publications related to Lymphangioleiomyomatosis, Text Mined Articles related to Lymphangioleiomyomatosis, Pathways related to Lymphangioleiomyomatosis, Biological processes related to Lymphangioleiomyomatosis). This can be done by clicking on the download link on the top-right side of the tables and clicking the "CSV" option. This will download the full table in .CSV format. Save the tables to the same directory as the test data downloaded above.
+For a different disease you can change the name of the disease in the url above. Make sure the disease exists with the same name in the database. Once the page has loaded you will need to manualy download 5 tables ("Drugs for Lymphangioleiomyomatosis", "Publications related to Lymphangioleiomyomatosis", "Text Mined Articles related to Lymphangioleiomyomatosis", "Pathways related to Lymphangioleiomyomatosis", "Biological processes related to Lymphangioleiomyomatosis"). This can be done by clicking on the download link on the top-right side of the tables and clicking the "CSV" option. This will download the full table in .CSV format. Save the tables to the same directory as the test data downloaded above.
 
 ### Run scRANK
 ```
