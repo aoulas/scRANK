@@ -1,9 +1,5 @@
 extractMalacards<-function (disease,files,path){
   
-  #disease<-"Lymphangioleiomyomatosis"
-  #files<-c("MalaCards - Pathways related to Lymphangioleiomyomatosis.csv","MalaCards - Biological processes related to Lymphangioleiomyomatosis.csv","MalaCards - Drugs for Lymphangioleiomyomatosis.csv")#"Myeloma_Multiple" "Autism","Autism_Spectrum_Disorder"
-  
-  
   setwd(path)
   
   
@@ -24,7 +20,6 @@ extractMalacards<-function (disease,files,path){
           superpathwayclean<-gsub(" ","_",superpathwayclean)
           superpathwayclean<-tolower(superpathwayclean)
           
-          xhtml<-read_html("https://pathcards.genecards.org/card/endometrial_cancer")
           xhtml <- tryCatch({
             read_html(paste("https://pathcards.genecards.org/card/",superpathwayclean,sep=""))
           }, error = function(e) {
@@ -96,8 +91,6 @@ extractMalacards<-function (disease,files,path){
         Phase<-str_split_1(csv[j,],",")[5]
         
         if(!is.na(DRUGS) && !DRUGS=="Name"){
-          #print(GO)
-          #DrugsAllNew<-append(DrugsAllNew, DRUGS)
           DrugsAllNew<-rbind(DrugsAllNew,cbind(DRUGS,Status,Phase))
         }
       }
