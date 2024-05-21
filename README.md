@@ -46,7 +46,7 @@ Paste the following link in your borwser.
 ```
 https://www.malacards.org/card/lymphangioleiomyomatosis
 ```
-For a differnet disease you can change the name of the disease in the url above. Make sure the disease exists with the same name in the database. Ensure to add the 'showAll=TRUE' flag to expand all tables in the web page (this may take some time to load). Once the page has loaded right-click and click save-as to download the html content to the same directory as the test data downloaded above.
+For a different disease you can change the name of the disease in the url above. Make sure the disease exists with the same name in the database. Once the page has you will need to manualy downlaoid 4 tables (Drugs for Lymphangioleiomyomatosis, Publications related to Lymphangioleiomyomatosis, Text Mined Articles related to Lymphangioleiomyomatosis, Pathways related to Lymphangioleiomyomatosis, Biological processes related to Lymphangioleiomyomatosis). This can be done by clicking on the download link on the top-right side of the tables and clicking the "CSV" option. This will download the full table in .CSV format. Save the tables to the same directory as the test data downloaded above.
 
 ### Run scRANK
 ```
@@ -57,7 +57,9 @@ library(scRANK)
 #to be common for all scRANK funnctions to work properly)
 path<-"full-path-to-where-data-was-extracted"
 disease<-"LAM"
-extractMalacards(disease = disease,files = c("name-of-html-file"),path = path)
+files<-c("MalaCards - Pathways related to Lymphangioleiomyomatosis.csv","MalaCards - Biological processes related to Lymphangioleiomyomatosis.csv","MalaCards - Drugs for Lymphangioleiomyomatosis.csv","MalaCards - Publications related to Lymphangioleiomyomatosis.csv","MalaCards - Text Mined Articles related to Lymphangioleiomyomatosis.csv")#"Myeloma_Multiple" "Autism","Autism_Spectrum_Disorder"
+
+extractMalacards(disease = disease,files = files,path = path)
 
 #Define extra arguments for scRANK functions
 annotate<-TRUE
