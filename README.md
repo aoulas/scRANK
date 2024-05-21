@@ -44,7 +44,7 @@ A test datsets from lymphangioleiomyomatosis (LAM) disease and control (Donor) s
 ### Extract prior knowledge from MalaCards database *IMPORTANT NOTE! - THE MALACARDS DATABASE STRUCTURE HAS CHANGED, SO ONLY THE HYPOTHESIS DRIVEN APPROACH (SEE TUTORIAL) IS CURRENTLY SUPPORTED BY SCRANK.
 Paste the following link in your borwser.
 ```
-https://www.malacards.org/card/lymphangioleiomyomatosis?showAll=TRUE
+https://www.malacards.org/card/lymphangioleiomyomatosis
 ```
 For a differnet disease you can change the name of the disease in the url above. Make sure the disease exists with the same name in the database. Ensure to add the 'showAll=TRUE' flag to expand all tables in the web page (this may take some time to load). Once the page has loaded right-click and click save-as to download the html content to the same directory as the test data downloaded above.
 
