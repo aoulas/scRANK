@@ -41,12 +41,12 @@ devtools::install_github("sqjin/CellChat")
 ### Downlaod test data 
 A test datsets from lymphangioleiomyomatosis (LAM) disease and control (Donor) samples is available for download [here](https://bioinformatics.cing.ac.cy/downloads/scRNA/LAM.tar.gz). Extract data in a local directory.
 
-### Extract prior knowledge from MalaCards database *IMPORTANT NOTE! - THE MALACARDS DATABASE STRUCTURE HAS CHANGED, SO ONLY THE HYPOTHESIS DRIVEN APPROACH (SEE TUTORIAL) IS CURRENTLY SUPPORTED BY SCRANK.
+### Extract prior knowledge from MalaCards database
 Paste the following link in your borwser.
 ```
 https://www.malacards.org/card/lymphangioleiomyomatosis
 ```
-For a different disease you can change the name of the disease in the url above. Make sure the disease exists with the same name in the database. Once the page has loaded you will need to manualy download 5 tables ("Drugs for Lymphangioleiomyomatosis", "Publications related to Lymphangioleiomyomatosis", "Text Mined Articles related to Lymphangioleiomyomatosis", "Pathways related to Lymphangioleiomyomatosis", "Biological processes related to Lymphangioleiomyomatosis"). This can be done by clicking on the download link on the top-right side of the tables and clicking the "CSV" option. This will download the full table in .CSV format. Save the tables to the same directory as the test data downloaded above.
+For a different disease you can change the name of the disease in the url above. Make sure the disease exists with the same name in the database. Once the page has loaded you will need to manualy download 5 tables ("Drugs for Lymphangioleiomyomatosis", "Publications related to Lymphangioleiomyomatosis", "Text Mined Articles related to Lymphangioleiomyomatosis", "Pathways related to Lymphangioleiomyomatosis", "Biological processes related to Lymphangioleiomyomatosis"). This can be done by clicking on the download link on the top-right side of the each table and clicking the "CSV" option. This will download the full table in .CSV format. Save the tables to the same directory as the test data downloaded above.
 
 ### Run scRANK
 ```
