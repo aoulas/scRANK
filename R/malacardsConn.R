@@ -10,6 +10,7 @@ extractMalacards<-function (disease,files,path){
   PathwaysAllNewReact<-c()
   PublicationsAllNew<-c()
   MOAsNew<-c()
+  
   for(i in 1:length(files)){
     csv<-read.csv2(files[i]) 
     if(grepl("Pathways",files[i])){
@@ -28,19 +29,23 @@ extractMalacards<-function (disease,files,path){
           })
           
           if (!is.null(xhtml)) {
-            tbls_ls <- xhtml %>%
-              html_nodes(".table")%>%
-              html_table(fill = TRUE)
+            # tbls_ls <- xhtml %>%
+            #   html_nodes(".table")%>%
+            #   html_table(fill = TRUE)
             
             pathway_source <- xhtml %>%
               html_nodes(".pathway-source")%>%
               html_nodes("img") %>%
               html_attr("title")
             
+            subpathways <- xhtml %>%
+              html_nodes(".pathway-link")%>%
+              html_nodes("a") %>%
+              html_text()
             
             
-            subpathways<-as.matrix(tbls_ls[[1]])
-            subpathways<-as.vector(subpathways)
+            # subpathways<-as.matrix(tbls_ls[[1]])
+            # subpathways<-as.vector(subpathways)
             subpathways<-subpathways[which(!is.na(subpathways))]
             
             
@@ -126,11 +131,11 @@ extractMalacards<-function (disease,files,path){
   
   drugscores<-c(1:length(DrugsAllNew))
   for(i in 1:length(DrugsAllNew)){
-    nooccur<-length(grep(DrugsAllNew[i],DrugsAllNew))
+    nooccur<-length(grep(DrugsAllNew[i],DrugsAllNew,fixed = TRUE))
     if(nooccur !=0){
       drugscores[i]<-drugscores[i]/nooccur
     }
-    pubs<-PublicationsAllNew$Year[grep(DrugsAllNew[i],PublicationsAllNew$Title)]
+    pubs<-PublicationsAllNew$Year[grep(DrugsAllNew[i],PublicationsAllNew$Title,fixed = TRUE)]
     nupub<-length(pubs)
     if(nupub !=0){
       drugscores[i]<-drugscores[i]/nupub
