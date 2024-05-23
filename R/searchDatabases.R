@@ -305,6 +305,10 @@ searchDatabases<-function(disease,path,scenario="Malacards",checkdrug=TRUE,keywo
   }
   listofoutput<-list(termsKEGG,termsGO,termsMSIG,termsWiki,termsReact,termsMOA)
   lens<-as.data.frame(c(length(termsKEGG),length(termsGO),length(termsMSIG),length(termsWiki),length(termsReact),length(termsMOA)))
+  indexes0<-which(lens==0)
+  if(length(indexes0)!=0){
+    print("*IMPORTANT NOTE - SOME OF THE TERMS FOR CERTAIN PATHWAYS RETURNED NO RESULTS, PLEASE REFINE THE SEARCH TERMS IN THE RESPECTIVE FILES BEFORE PROCEEDING TO RANKING CELL TYPES")
+  }
   rownames(lens)<-c("KEGG","GO","MSIG","WIKI","REACT","DRUGS")
   
   lens<-cbind(lens,rownames(lens))
