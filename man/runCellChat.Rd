@@ -25,6 +25,9 @@ runCellChat(seuratObject,labels,cellIDs,LablesUniq=NULL)
   \item{LablesUniq}{
   \code{Define the labels (2) to perform pairwise comparisons. The first label will be considered as the reference}
   }
+  \item{disease}{
+  \code{The name of the disease under study}
+  }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -33,7 +36,8 @@ runCellChat(seuratObject,labels,cellIDs,LablesUniq=NULL)
 \item{seuratObject }{A SEURAT object obtained from the basic analysis function}
 \item{labels }{A  Character String with the name of the column in the SEURAT object defining the sample labels to be used for network differentiation.}
 \item{cellIDs }{A  Character String with the name of the column in the SEURAT object defining the annotated cell IDs.}
-\item{LablesUniq }{A  Character vector with the names of sample labels to be used for network differentiation (default=NULL). If NULL the labels parameter will be used to define the sample classes.}  
+\item{LablesUniq }{A  Character vector with the names of sample labels to be used for network differentiation (default=NULL). If NULL the labels parameter will be used to define the sample classes.}
+\item{disease }{A Character string with the name of disease}
 }
 \references{
 %% ~put references to the literature/web site here ~
