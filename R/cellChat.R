@@ -1,4 +1,4 @@
-runCellChat<-function(seuratObject,labelsC,cellIDs,LablesUniq=NULL){
+runCellChat<-function(seuratObject,labelsC,cellIDs,LablesUniq=NULL,disease){
   library(CellChat)
   subDir <- "Figures"
   if (!file.exists(subDir)){
