@@ -9,7 +9,7 @@ Run CellChat for two conditions (e.g., disease vs. control) samples for each cel
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-runCellChat(seuratObject,labels,cellIDs,LablesUniq=NULL)
+runCellChat(seuratObject,labels,cellIDs,LablesUniq=NULL,disease)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
