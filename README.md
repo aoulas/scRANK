@@ -109,7 +109,7 @@ listofscRANKs<-rankCells(seuratObject,path,scan=scan,priorknowledgePathsKEGG,pri
   priorknowledgePathsWiki,priorknowledgePathsReact,priorknowledgeDRUGSMOA,userlabel,usercelltype,checkdrug,scenario=scenario,LablesUniq)
 
 #Run CellChat - note the first label is considered as the reference (e.g., control)
-foldchangeInterMat<-runCellChat(seuratObject,userlabel,usercelltype)
+foldchangeInterMat<-runCellChat(seuratObject,userlabel,usercelltype,disease)
 
 #Peform basic plots
 plotRanks("filename-of-Ranking-results")
